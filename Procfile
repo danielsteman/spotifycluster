@@ -1,0 +1,1 @@
+web: gunicorn spotifycluster.wsgi

@@ -1,0 +1,7 @@
+gunicorn
+django_heroku
+django
+sklearn
+datetime
+requests
+django-rest-framework

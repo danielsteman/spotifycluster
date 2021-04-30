@@ -133,6 +133,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'react-frontend', 'build', 'static'),
 )
+STATIC_ROOT = '/react-frontend/build/static/'
 
 import django_heroku
 django_heroku.settings(locals())

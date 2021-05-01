@@ -18,6 +18,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
     fetch('/spotify/is-authenticated')
       .then(response => response.json())
       .then(data => {
+        console.log(`authentication status: ${data.status}`)
         setAuthenticated(data.status)
         hideLoading()
       })

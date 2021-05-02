@@ -46,7 +46,8 @@ def spotify_callback(request, format=None):
 
     # Might want to factor out in credentials file
     # return redirect('http://127.0.0.1:3000/')
-    return redirect('http://127.0.0.1:5000/')
+    # return redirect('http://127.0.0.1:5000/')
+    return redirect('https://nameless-taiga-02413.herokuapp.com/')
 
 class IsAuthenticated(APIView):
     def get(self, request, format=None):

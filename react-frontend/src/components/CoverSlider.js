@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import NextIcon from '../assets/next.svg'
 
 const Scene = styled.div`
   width: 300px;
@@ -74,6 +73,7 @@ const CoverSlider = ({ images, selectPlaylist, userInfo, ids }) => {
 
   return (
     <div>
+      <p style={{color:"white"}}>testestest</p>
       <Scene>
         <Carousel>
           {positions.map((position, index) => (

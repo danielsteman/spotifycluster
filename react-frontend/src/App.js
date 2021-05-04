@@ -26,6 +26,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
   }, [])
 
   useEffect(() => {
+    console.log(authenticated)
     if (authenticated) {
       fetch('/spotify/playlists')
       .then(response => response.json())

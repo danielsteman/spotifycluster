@@ -14,8 +14,6 @@ import os
 # from whitenoise.django import DjangoWhiteNoise
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'spotifycluster.settings')
-os.environ['DJANGO_CONFIGURATION'] = 'production'
-os.environ['PRODUCTION_BASE_URL'] = 'https://nameless-taiga-02413.herokuapp.com/'
 
 # application = get_wsgi_application()
 

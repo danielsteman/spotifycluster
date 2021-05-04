@@ -1,5 +1,6 @@
+import os
 from django.shortcuts import render, redirect
-from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
+from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID, URL
 from rest_framework.views import APIView
 from requests import Request, post
 from rest_framework import status
@@ -47,7 +48,8 @@ def spotify_callback(request, format=None):
     # Might want to factor out in credentials file
     # return redirect('http://127.0.0.1:3000/')
     # return redirect('http://127.0.0.1:5000/')
-    return redirect('https://nameless-taiga-02413.herokuapp.com/')
+    print (URL)
+    return redirect(URL)
 
 class IsAuthenticated(APIView):
     def get(self, request, format=None):

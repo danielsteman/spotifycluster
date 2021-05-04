@@ -45,11 +45,7 @@ def spotify_callback(request, format=None):
     update_or_create_user_token(
         request.session.session_key, access_token, token_type, expires_in, refresh_token)
 
-    # Might want to factor out in credentials file
-    # return redirect('http://127.0.0.1:3000/')
-    # return redirect('http://127.0.0.1:5000/')
-    print (URL)
-    return redirect(URL)
+    return redirect('/')
 
 class IsAuthenticated(APIView):
     def get(self, request, format=None):

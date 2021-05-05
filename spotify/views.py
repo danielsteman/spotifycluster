@@ -73,3 +73,17 @@ class getFeatures(APIView):
         response = get_track_features(session_id, playlist_id)
 
         return Response(response, status=status.HTTP_200_OK)
+
+class getFeatureBatch(APIView):
+    def get(self, request, format=None):
+        session_id = request.session.session_key
+        playlist_id = request.headers.get('id')
+        next_url = request.headers.get('next_url')
+        if next_url == None:
+            endpoint = f'/playlists/{playlist_id}/tracks/?offset=0&limit=100'
+        else:
+            endpoint = next_url
+        response = execute_spotity_api_request(session_id, endpoint)
+
+        return Response(response, status=status.HTTP_200_OK)
+

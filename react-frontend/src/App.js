@@ -12,6 +12,11 @@ const App = ({ loading, showLoading, hideLoading }) => {
   const [playlistList, setPlaylistList] = useState([])
   const [userInfo, setUserInfo] = useState({})
 
+  const [titles, setTitles] = useState([])
+  const [artists, setArtists] = useState([])
+  const [features, setFeatures] = useState([])
+  const [ids, setIds] = useState([])
+
   const history = useHistory()
 
   useEffect(() => {
@@ -43,16 +48,41 @@ const App = ({ loading, showLoading, hideLoading }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated])
 
-  const fetchPlaylist = (playlistId) => {  
+  // const fetchPlaylist = (playlistId) => {  
+  //   showLoading()
+  //   fetch('/spotify/get-tracks-data', {headers: {
+  //     'id': playlistId
+  //   }})
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     history.push({pathname: `playlists/${playlistId}`, data})
+  //     hideLoading()
+  //   })
+  // }
+
+  const fetchPlaylist = (playlistId) => {
     showLoading()
-    fetch('/spotify/get-tracks-data', {headers: {
-        'id': playlistId
-    }})
-    .then(response => response.json())
-    .then(data => {
-      history.push({pathname: `playlists/${playlistId}`, data})
-      hideLoading()
-    })
+    const getPlaylistDataRecursively = (url) => {
+      fetch('/spotify/get-track-ids', {headers: {
+        'url': url
+      }})
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+
+        setTitles(data.title)
+        setArtists(data.artist)
+        setFeatures(data.features)
+        setIds(data.track_ids)
+
+        if (data.next_url) {
+          const next_url = data.next_url.replace('https://api.spotify.com/v1', '')
+          getPlaylistDataRecursively(next_url)
+        }
+      })
+    }
+    getPlaylistDataRecursively(`/playlists/${playlistId}/tracks/?offset=0&limit=100`)
+    // implement hideLoading()
   }
 
   const handleLogin = () => {  

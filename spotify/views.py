@@ -1,4 +1,5 @@
 import os
+import json
 from django.shortcuts import render, redirect
 from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID, URL
 from rest_framework.views import APIView
@@ -7,6 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from .util import *
 from .cluster import *
+from django.http import JsonResponse
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -70,20 +72,39 @@ class getFeatures(APIView):
     def get(self, request, format=None):
         session_id = request.session.session_key
         playlist_id = request.headers.get('id')
-        response = get_track_features(session_id, playlist_id)
+        response = get_track_features_and_titles(session_id, playlist_id)
 
         return Response(response, status=status.HTTP_200_OK)
 
-class getFeatureBatch(APIView):
+# class getTrackIds(APIView):
+#     def get(self, request, format=None):
+#         session_id = request.session.session_key
+#         playlist_id = request.headers.get('id')
+#         response = get_tracks(session_id, playlist_id)
+
+#         return Response(response, status=status.HTTP_200_OK)
+
+class getTrackIds(APIView):
+    def get(self, request, format=None):
+        session_id = request.session.session_key
+        url = request.headers.get('url')
+        response = get_tracks(session_id, url)
+
+        return Response(response, status=status.HTTP_200_OK)
+
+class getTrackFeatures(APIView):
+    def get(self, request, format=None):
+        session_id = request.session.session_key
+        # tracks are returned as comma-separated string
+        tracks = request.headers.get('tracks').split(',')
+        response = tracks
+
+        return Response(response, status=status.HTTP_200_OK)
+
+class getTrackTitles(APIView):
     def get(self, request, format=None):
         session_id = request.session.session_key
         playlist_id = request.headers.get('id')
-        next_url = request.headers.get('next_url')
-        if next_url == None:
-            endpoint = f'/playlists/{playlist_id}/tracks/?offset=0&limit=100'
-        else:
-            endpoint = next_url
-        response = execute_spotity_api_request(session_id, endpoint)
+        response = get_track_titles(playlist_id)
 
         return Response(response, status=status.HTTP_200_OK)
-

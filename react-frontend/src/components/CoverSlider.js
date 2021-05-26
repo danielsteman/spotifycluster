@@ -73,7 +73,6 @@ const CoverSlider = ({ images, selectPlaylist, userInfo, ids }) => {
 
   return (
     <div>
-      <p style={{color:"white"}}>testestest</p>
       <Scene>
         <Carousel>
           {positions.map((position, index) => (

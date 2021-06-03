@@ -1,12 +1,15 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
+const Container = styled.div`
+`;
+
 const Scene = styled.div`
   width: 300px;
   height: 300px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 15%;
+  margin-top: 20%;
   position: relative;
   perspective: 500px;
 `;
@@ -72,7 +75,8 @@ const CoverSlider = ({ images, selectPlaylist, userInfo, ids }) => {
   };
 
   return (
-    <div>
+    <Container>
+      {userInfo.display_name}
       <Scene>
         <Carousel>
           {positions.map((position, index) => (
@@ -92,7 +96,7 @@ const CoverSlider = ({ images, selectPlaylist, userInfo, ids }) => {
         <button onClick={() => handlePrev(positions)}>prev</button>
         <button onClick={() => handleNext(positions)}>next</button>
       </SwipeButtons>
-    </div>
+    </Container>
   );
   
 };

@@ -20,12 +20,12 @@ const PlaylistsCover = styled.img`
     padding: 1em;
 `
 
-const PlaylistsInfo = styled.div`
+const PlaylistsInfoContainer = styled.div`
     position: fixed;
     margin-left: 50%;
     margin-top: 5em;
     padding: 1em;
-    text-align: center;
+    color: white;
 `
 
 const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, features }) => {
@@ -33,7 +33,7 @@ const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, featur
         <Grid>
             <PlaylistsCoversContainer>
                 {images.map((image, index) => (
-                    <PlaylistsCover 
+                    <PlaylistsCover
                         key={index}
                         src={image}
                         alt="Playlist cover"
@@ -41,9 +41,10 @@ const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, featur
                     />
                 ))}
             </PlaylistsCoversContainer>
-            <PlaylistsInfo>
+            <PlaylistsInfoContainer>
                 <h1>Welcome, {userInfo.display_name}</h1>
-            </PlaylistsInfo>
+                <p>Playlist length: {titles.length}</p>
+            </PlaylistsInfoContainer>
         </Grid>
     )
 }

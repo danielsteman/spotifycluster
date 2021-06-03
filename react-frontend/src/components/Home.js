@@ -1,5 +1,4 @@
 import { Redirect } from 'react-router-dom';
-import CoverSlider from './CoverSlider';
 import Covers from './Covers'
 
 const Home = ({ authenticated, userInfo, playlistList, selectPlaylist, titles, features, ids, artists }) => {

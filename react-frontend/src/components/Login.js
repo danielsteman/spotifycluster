@@ -1,12 +1,12 @@
-// import { Redirect } from 'react-router-dom';
+import './Login.css'
 
 const Login = ( {handleLogin} ) => {
     return (
-        <div>
-            <h1>
-                Welcome!
-            </h1>
-            <button onClick={handleLogin}>Login</button>
+        <div class='container'>
+            <div class='typewriter'>
+                <h1>Find clusters in your Spotify playlists using ...</h1>
+            </div>
+            <button class='loginButton' onClick={handleLogin}>Login</button>
         </div>
     )
 }

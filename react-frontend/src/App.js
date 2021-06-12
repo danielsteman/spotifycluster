@@ -16,6 +16,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
   const [titles, setTitles] = useState([])
   const [artists, setArtists] = useState([])
   const [features, setFeatures] = useState([])
+  const [TSNEfeatures, setTSNEfeatures] = useState([])
   const [ids, setIds] = useState([])
 
   const history = useHistory()
@@ -37,6 +38,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
       fetch('/spotify/playlists')
       .then(response => response.json())
       .then(data => {
+        setIds(data.playlists.items.map(x => x.id))
         setPlaylistList(data.playlists.items)
       })
       fetch('/spotify/user-profile')
@@ -54,18 +56,25 @@ const App = ({ loading, showLoading, hideLoading }) => {
 
   const fetchPlaylist = (playlistId) => {
     showLoading()
+
+    setTitles([])
+    setArtists([])
+    setFeatures([])
+    setTSNEfeatures([])
+    setIds([])
+
     const getPlaylistDataRecursively = (url) => {
       return fetch('/spotify/get-track-ids', {headers: {
         'url': url
       }})
       .then(response => response.json())
       .then(data => {
-        console.log(data)
 
-        setTitles([...titles, data.title])
-        setArtists([...artists, data.artist])
-        setFeatures([...features, data.features])
-        setIds([...ids, data.track_ids])
+        setTitles(titles => ([...titles, ...data.title]))
+        setArtists(artists => ([...artists, data.artist]))
+        setFeatures(features => ([...features, data.features]))
+        setTSNEfeatures(TSNEfeatures => ([...TSNEfeatures, data.TSNEfeatures]))
+        setIds(ids => ([...ids, data.track_ids]))
 
         if (data.next_url) {
           const next_url = data.next_url.replace('https://api.spotify.com/v1', '')
@@ -103,31 +112,32 @@ const App = ({ loading, showLoading, hideLoading }) => {
 
   if (loading) { return <LoadingScreen/> }
   return (
-    <Switch>
-      <div class='app'      >
-        <Navigation/>
-          <Route path='/playlists/:id'>
-            <Playlist 
-              id={playlist}
-            />
-          </Route>
-          <Route path='/login'>
-            <Login handleLogin={handleLogin} />
-          </Route>
-          <Route path='/'>
-            <Home
-              authenticated={authenticated}
-              userInfo={userInfo}
-              playlistList={playlistList}
-              selectPlaylist={fetchPlaylist}
-              titles={titles}
-              artists={artists}
-              features={features}
-              ids={ids}
-            />
-          </Route>
-      </div>
-    </Switch>
+    <div>
+      <Navigation/>
+      <Switch>
+        <Route path='/playlists/:id'>
+          <Playlist 
+            id={playlist}
+          />
+        </Route>
+        <Route path='/login'>
+          <Login handleLogin={handleLogin} />
+        </Route>
+        <Route path='/'>
+          <Home
+            authenticated={authenticated}
+            userInfo={userInfo}
+            playlistList={playlistList}
+            selectPlaylist={fetchPlaylist}
+            titles={titles}
+            artists={artists}
+            features={features}
+            TSNEfeatures={TSNEfeatures}
+            ids={ids}
+          />
+        </Route>
+      </Switch>
+    </div>
   )
 }
 

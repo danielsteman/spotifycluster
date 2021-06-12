@@ -156,26 +156,14 @@ def get_track_features_and_titles(session_id, playlist_id):
 
 ### REVISED FUNCTIONS
 
-# def get_tracks(session_id, playlist_id):
-#     n = get_playlist_paginations(session_id, playlist_id)
-#     ids = []
-#     for i in range(n):
-#         # get tracks in batches of 100
-#         next_endpoint = f'/playlists/{playlist_id}/tracks/?offset={i*batch_size}&limit=100'
-#         response = execute_spotify_api_request(session_id, next_endpoint)
-#         # filter out tracks without ID (have likely been removed from Spotify)
-#         response = [x for x in response.get('items') if x.get('track').get('id') != None]
-#         ids_batch = [track.get('track').get('id') for track in response]
-#         ids.append(ids_batch)
-#     return flat(ids)
-
 def get_tracks(session_id, url):
     response = execute_spotify_api_request(session_id, url)
-    response_dropna = [x for x in response.get('items') if x.get('track').get('id') != None]
+    response_dropna = [x for x in response.get('items')]
     track_ids = [track.get('track').get('id') for track in response_dropna]
     artists = [', '.join([artist.get('name') for artist in track.get('track').get('artists')]) for track in response_dropna]
     titles = [track.get('track').get('name') for track in response_dropna]
     features = get_features(session_id, track_ids)
+    TSNE_features = TSNE_reduce(features)
     try:
         next_url = response.get('next')
     except:
@@ -185,6 +173,7 @@ def get_tracks(session_id, url):
         'artist': artists,
         'title': titles,
         'features': features,
+        'TSNE_features': TSNE_features,
         'next_url': next_url
     }
     return output

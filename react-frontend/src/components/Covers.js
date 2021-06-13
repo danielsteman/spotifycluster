@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useHistory } from 'react-router-dom';
 
 const Grid = styled.div`
     display: grid;
@@ -28,7 +29,10 @@ const PlaylistsInfoContainer = styled.div`
     color: white;
 `
 
-const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, features }) => {
+const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, features, playlistList, selectedPlaylist, setSelectPlaylistId }) => {
+
+    const history = useHistory()
+
     return(
         <Grid>
             <PlaylistsCoversContainer>
@@ -37,13 +41,19 @@ const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, featur
                         key={index}
                         src={image}
                         alt="Playlist cover"
-                        onClick={() => selectPlaylist(ids[index])}
+                        onClick={() => {
+                            selectPlaylist(playlistList.map(x => x.id)[index])
+                            setSelectPlaylistId(playlistList.map(x => x.id)[index])
+                        }}
                     />
                 ))}
             </PlaylistsCoversContainer>
             <PlaylistsInfoContainer>
-                <h1>Welcome, {userInfo.display_name}</h1>
+                <h1>User: {userInfo.display_name}</h1>
                 <p>Playlist length: {titles.length}</p>
+                <button onClick={() => {
+                    console.log(selectedPlaylist)
+                }}>Plot</button>
             </PlaylistsInfoContainer>
         </Grid>
     )

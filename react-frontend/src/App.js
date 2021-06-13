@@ -1,4 +1,4 @@
-import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Login from './components/Login'
 import Home from './components/Home'
 import Playlist from './components/Playlist'
@@ -13,13 +13,13 @@ const App = ({ loading, showLoading, hideLoading }) => {
   const [playlistList, setPlaylistList] = useState([])
   const [userInfo, setUserInfo] = useState({})
 
+  const [selectedPlaylist, setSelectedPlaylist] = useState('')
+
   const [titles, setTitles] = useState([])
   const [artists, setArtists] = useState([])
   const [features, setFeatures] = useState([])
   const [TSNEfeatures, setTSNEfeatures] = useState([])
   const [ids, setIds] = useState([])
-
-  const history = useHistory()
 
   useEffect(() => {
     fetch('/spotify/is-authenticated')
@@ -33,19 +33,18 @@ const App = ({ loading, showLoading, hideLoading }) => {
   }, [])
 
   useEffect(() => {
-    console.log(authenticated)
     if (authenticated) {
       fetch('/spotify/playlists')
       .then(response => response.json())
       .then(data => {
-        setIds(data.playlists.items.map(x => x.id))
+        const ids = data.playlists.items.map(x => x.id)
+        setIds(ids)
         setPlaylistList(data.playlists.items)
       })
       fetch('/spotify/user-profile')
       .then(response => response.json())
       .then(data => {
         setUserInfo(data.user_profile)
-        console.log(userInfo.display_name)
         hideLoading()
       })
     }
@@ -54,7 +53,13 @@ const App = ({ loading, showLoading, hideLoading }) => {
   
   //     history.push({pathname: `playlists/${playlistId}`, data})
 
+  // this method is passed down so the state can be updated from child components
+  const setSelectPlaylistId = (playlistId) => {
+    setSelectedPlaylist(playlistId)
+  }
+
   const fetchPlaylist = (playlistId) => {
+
     showLoading()
 
     setTitles([])
@@ -70,7 +75,9 @@ const App = ({ loading, showLoading, hideLoading }) => {
       .then(response => response.json())
       .then(data => {
 
-        setTitles(titles => ([...titles, ...data.title]))
+        console.log(data)
+
+        setTitles(titles => ([...titles, data.title]))
         setArtists(artists => ([...artists, data.artist]))
         setFeatures(features => ([...features, data.features]))
         setTSNEfeatures(TSNEfeatures => ([...TSNEfeatures, data.TSNEfeatures]))
@@ -134,6 +141,8 @@ const App = ({ loading, showLoading, hideLoading }) => {
             features={features}
             TSNEfeatures={TSNEfeatures}
             ids={ids}
+            selectedPlaylist={selectedPlaylist}
+            setSelectPlaylistId={setSelectPlaylistId}
           />
         </Route>
       </Switch>

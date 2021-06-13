@@ -1,7 +1,18 @@
 import { Redirect } from 'react-router-dom';
 import Covers from './Covers'
 
-const Home = ({ authenticated, userInfo, playlistList, selectPlaylist, titles, features, ids, artists }) => {
+const Home = ({ 
+    authenticated, 
+    userInfo, 
+    playlistList, 
+    selectPlaylist, 
+    titles, 
+    features, 
+    ids, 
+    artists, 
+    selectedPlaylist, 
+    setSelectPlaylistId 
+}) => {
     const images = playlistList.map(x => x.images[0].url)
     if (authenticated) {
         return(
@@ -13,6 +24,9 @@ const Home = ({ authenticated, userInfo, playlistList, selectPlaylist, titles, f
                 artists={artists}
                 features={features}
                 ids={ids}
+                playlistList={playlistList}
+                selectedPlaylist={selectedPlaylist}
+                setSelectPlaylistId={setSelectPlaylistId}
             />
         )
     } else {

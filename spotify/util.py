@@ -9,6 +9,9 @@ from .cluster import KMeans_embedded, TSNE_reduce
 BASE_URL = 'https://api.spotify.com/v1'
 batch_size = 100
 
+def flat(lst):
+    return [item for sublist in lst for item in sublist]
+
 def get_user_tokens(session_id):
     user_tokens = SpotifyToken.objects.filter(user=session_id)
     if user_tokens.exists():
@@ -116,7 +119,7 @@ def get_track_data(response):
     data = zip(title, artist)
     return data
 
-def get_track_features(session_id, playlist_id):
+def get_track_features_and_titles(session_id, playlist_id):
     n = get_playlist_paginations(session_id, playlist_id)
     features = []
     titles = []
@@ -151,3 +154,50 @@ def get_track_features(session_id, playlist_id):
 
     return flat_dict
 
+### REVISED FUNCTIONS
+
+def get_tracks(session_id, url):
+    response = execute_spotify_api_request(session_id, url)
+    response_dropna = [x for x in response.get('items')]
+    track_ids = [track.get('track').get('id') for track in response_dropna]
+    artists = [', '.join([artist.get('name') for artist in track.get('track').get('artists')]) for track in response_dropna]
+    titles = [track.get('track').get('name') for track in response_dropna]
+    features = get_features(session_id, track_ids)
+    TSNE_features = TSNE_reduce(features)
+    try:
+        next_url = response.get('next')
+    except:
+        next_url = None
+    output = {
+        'track_ids': track_ids,
+        'artist': artists,
+        'title': titles,
+        'features': features,
+        'TSNE_features': TSNE_features,
+        'next_url': next_url
+    }
+    return output
+
+def get_track_features(session_id, tracks):
+    # number of batches is computed according to defined batch_size
+    n = math.ceil(len(tracks)/batch_size)
+    features = []
+    for i in range(n):
+        # index the tracks list to make batches of size batch_size
+        track_batch = tracks[batch_size*i:batch_size*i+batch_size]
+        features_batch = get_features(session_id, track_batch)
+        features.append(features_batch)
+    return flat(features)
+
+def get_track_titles(session_id, playlist_id):
+    n = get_playlist_paginations(session_id, playlist_id)
+    for i in range(n):
+        # get tracks in batches of 100
+        next_endpoint = f'/playlists/{playlist_id}/tracks/?offset={i*batch_size}&limit=100'
+        response = execute_spotify_api_request(session_id, next_endpoint)
+        # filter out tracks without ID (have likely been removed from Spotify)
+        response = [x for x in response.get('items') if x.get('track').get('id') != None]
+        title_and_artist = get_track_data(response)
+        titles.append(title_and_artist)
+    
+    return flat(titles)

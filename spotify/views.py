@@ -1,11 +1,14 @@
+import os
+import json
 from django.shortcuts import render, redirect
-from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
+from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID, URL
 from rest_framework.views import APIView
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from .util import *
 from .cluster import *
+from django.http import JsonResponse
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -44,9 +47,7 @@ def spotify_callback(request, format=None):
     update_or_create_user_token(
         request.session.session_key, access_token, token_type, expires_in, refresh_token)
 
-    # Might want to factor out in credentials file
-    return redirect('http://127.0.0.1:3000/')
-    # return redirect('http://127.0.0.1:8000/')
+    return redirect('/')
 
 class IsAuthenticated(APIView):
     def get(self, request, format=None):
@@ -71,6 +72,39 @@ class getFeatures(APIView):
     def get(self, request, format=None):
         session_id = request.session.session_key
         playlist_id = request.headers.get('id')
-        response = get_track_features(session_id, playlist_id)
+        response = get_track_features_and_titles(session_id, playlist_id)
+
+        return Response(response, status=status.HTTP_200_OK)
+
+# class getTrackIds(APIView):
+#     def get(self, request, format=None):
+#         session_id = request.session.session_key
+#         playlist_id = request.headers.get('id')
+#         response = get_tracks(session_id, playlist_id)
+
+#         return Response(response, status=status.HTTP_200_OK)
+
+class getTrackIds(APIView):
+    def get(self, request, format=None):
+        session_id = request.session.session_key
+        url = request.headers.get('url')
+        response = get_tracks(session_id, url)
+
+        return Response(response, status=status.HTTP_200_OK)
+
+class getTrackFeatures(APIView):
+    def get(self, request, format=None):
+        session_id = request.session.session_key
+        # tracks are returned as comma-separated string
+        tracks = request.headers.get('tracks').split(',')
+        response = tracks
+
+        return Response(response, status=status.HTTP_200_OK)
+
+class getTrackTitles(APIView):
+    def get(self, request, format=None):
+        session_id = request.session.session_key
+        playlist_id = request.headers.get('id')
+        response = get_track_titles(playlist_id)
 
         return Response(response, status=status.HTTP_200_OK)

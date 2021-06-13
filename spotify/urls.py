@@ -7,5 +7,8 @@ urlpatterns = [
     path('is-authenticated', IsAuthenticated.as_view()),
     path('playlists', userPlaylists.as_view()),
     path('user-profile', userProfile.as_view()),
-    path('get-tracks-data', getFeatures.as_view())
+    path('get-tracks-data', getFeatures.as_view()),
+    path('get-track-ids', getTrackIds.as_view()),
+    path('get-track-features', getTrackFeatures.as_view()),
+    path('get-track-titles', getTrackTitles.as_view())
 ]

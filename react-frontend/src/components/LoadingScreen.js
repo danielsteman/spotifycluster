@@ -1,10 +1,17 @@
 import LoadingAnimation from '../assets/demo-loader.svg'
-import './LoadingScreen.css'
+import styled from "styled-components";
+
+const LoadingAnimationContainer = styled.div`
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`
 
 const LoadingScreen = () => (
-    <div className='loadingAnimationContainer'>
+    <LoadingAnimationContainer>
         <object type="image/svg+xml" data={LoadingAnimation}>svg-animation</object>
-    </div>
+    </LoadingAnimationContainer>
 )
 
 export default LoadingScreen

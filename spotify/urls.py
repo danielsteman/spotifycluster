@@ -10,5 +10,6 @@ urlpatterns = [
     path('get-tracks-data', getFeatures.as_view()),
     path('get-track-ids', getTrackIds.as_view()),
     path('get-track-features', getTrackFeatures.as_view()),
-    path('get-track-titles', getTrackTitles.as_view())
+    path('get-track-titles', getTrackTitles.as_view()),
+    path('get-labels', getLabels.as_view())
 ]

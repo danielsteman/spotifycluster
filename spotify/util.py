@@ -4,7 +4,7 @@ from datetime import timedelta
 from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
 import math
-from .cluster import KMeans_embedded, TSNE_reduce
+from .cluster import TSNE_reduce, KMeans_labeler, MeanShift_labeler, AffinityPropagation_labeler
 
 BASE_URL = 'https://api.spotify.com/v1'
 batch_size = 100
@@ -201,3 +201,15 @@ def get_track_titles(session_id, playlist_id):
         titles.append(title_and_artist)
     
     return flat(titles)
+
+def get_labels(session_id, model, features):
+    if model == 'K-means':
+        labels = KMeans_labeler(features)
+    elif model == 'Affinity Propagation':
+        labels = AffinityPropagation_labeler(features)
+    elif model == 'Mean Shift':
+        labels = MeanShift_labeler(features)
+    else:
+        return 'Model is not included in cluster model module'
+
+    return labels

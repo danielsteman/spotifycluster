@@ -10,16 +10,18 @@ import './App.css'
 const App = ({ loading, showLoading, hideLoading }) => {
 
   const [authenticated, setAuthenticated] = useState(false)
+
   const [playlistList, setPlaylistList] = useState([])
   const [userInfo, setUserInfo] = useState({})
-
-  const [selectedPlaylist, setSelectedPlaylist] = useState('')
-
   const [titles, setTitles] = useState([])
   const [artists, setArtists] = useState([])
+  const [ids, setIds] = useState([])
+  const [selectedPlaylist, setSelectedPlaylist] = useState('')
+
   const [features, setFeatures] = useState([])
   const [TSNEfeatures, setTSNEfeatures] = useState([])
-  const [ids, setIds] = useState([])
+
+  const [labels, setLabels] = useState([])
 
   useEffect(() => {
     fetch('/spotify/is-authenticated')
@@ -50,12 +52,27 @@ const App = ({ loading, showLoading, hideLoading }) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated])
-  
-  //     history.push({pathname: `playlists/${playlistId}`, data})
 
-  // this method is passed down so the state can be updated from child components
+  // setSelectPlaylistId method is passed down so the state can be updated from child components
   const setSelectPlaylistId = (playlistId) => {
     setSelectedPlaylist(playlistId)
+  }
+
+  const getLabels = (model) => {
+    showLoading()
+    fetch('/spotify/get-labels', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Model': model
+      },
+      body: JSON.stringify(features)
+    })
+    .then(response => response.json())
+    .then(data => {
+      setLabels(data)
+      hideLoading()
+    })
   }
 
   const fetchPlaylist = (playlistId) => {
@@ -67,6 +84,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
     setFeatures([])
     setTSNEfeatures([])
     setIds([])
+    setLabels([])
 
     const getPlaylistDataRecursively = (url) => {
       return fetch('/spotify/get-track-ids', {headers: {
@@ -77,11 +95,11 @@ const App = ({ loading, showLoading, hideLoading }) => {
 
         console.log(data)
 
-        setTitles(titles => ([...titles, data.title]))
-        setArtists(artists => ([...artists, data.artist]))
-        setFeatures(features => ([...features, data.features]))
-        setTSNEfeatures(TSNEfeatures => ([...TSNEfeatures, data.TSNEfeatures]))
-        setIds(ids => ([...ids, data.track_ids]))
+        setTitles(titles => ([...titles, ...data.title]))
+        setArtists(artists => ([...artists, ...data.artist]))
+        setFeatures(features => ([...features, ...data.features]))
+        setTSNEfeatures(TSNEfeatures => ([...TSNEfeatures, ...data.TSNE_features]))
+        setIds(ids => ([...ids, ...data.track_ids]))
 
         if (data.next_url) {
           const next_url = data.next_url.replace('https://api.spotify.com/v1', '')
@@ -123,8 +141,10 @@ const App = ({ loading, showLoading, hideLoading }) => {
       <Navigation/>
       <Switch>
         <Route path='/playlists/:id'>
-          <Playlist 
+          <Playlist
             id={playlist}
+            getLabels={getLabels}
+            labels={labels}
           />
         </Route>
         <Route path='/login'>
@@ -143,6 +163,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
             ids={ids}
             selectedPlaylist={selectedPlaylist}
             setSelectPlaylistId={setSelectPlaylistId}
+            getLabels={getLabels}
           />
         </Route>
       </Switch>

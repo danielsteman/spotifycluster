@@ -6,6 +6,10 @@ Leveraging algorithms of scikit-learn to find clusters within your playlists.
 
 Documentation: https://scikit-learn.org/stable/modules/clustering.html
 
+The backend makes use of Spotify authorization so users can login and grant permission to fetch their data for analysis. 
+
+Documentation: https://developer.spotify.com/documentation/general/guides/authorization-guide/
+
 ## Technology :technologist:
 
 #### Backend

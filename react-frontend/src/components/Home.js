@@ -7,11 +7,13 @@ const Home = ({
     playlistList, 
     selectPlaylist, 
     titles, 
-    features, 
+    features,
+    TSNEfeatures,
     ids, 
     artists, 
     selectedPlaylist, 
-    setSelectPlaylistId 
+    setSelectPlaylistId,
+    getLabels
 }) => {
     const images = playlistList.map(x => x.images[0].url)
     if (authenticated) {
@@ -27,6 +29,8 @@ const Home = ({
                 playlistList={playlistList}
                 selectedPlaylist={selectedPlaylist}
                 setSelectPlaylistId={setSelectPlaylistId}
+                TSNEfeatures={TSNEfeatures}
+                getLabels={getLabels}
             />
         )
     } else {

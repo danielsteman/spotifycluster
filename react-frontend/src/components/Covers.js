@@ -29,9 +29,25 @@ const PlaylistsInfoContainer = styled.div`
     color: white;
 `
 
-const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, features, playlistList, selectedPlaylist, setSelectPlaylistId }) => {
+const Covers = ({ 
+    images, 
+    selectPlaylist, 
+    userInfo, 
+    ids, 
+    titles, 
+    artists, 
+    features,
+    TSNEfeatures,
+    playlistList, 
+    selectedPlaylist, 
+    setSelectPlaylistId,
+    getLabels }) => {
+
+    const data = {'titles': titles, 'artists': artists, 'TSNE_features': TSNEfeatures, 'features': features}
 
     const history = useHistory()
+
+    // history.push({pathname: `playlists/${playlistId}`, data})
 
     return(
         <Grid>
@@ -49,10 +65,11 @@ const Covers = ({ images, selectPlaylist, userInfo, ids, titles, artists, featur
                 ))}
             </PlaylistsCoversContainer>
             <PlaylistsInfoContainer>
-                <h1>User: {userInfo.display_name}</h1>
+                <h1>Hi, {userInfo.display_name}</h1>
+                <p>Choose playlist to analyse.</p>
                 <p>Playlist length: {titles.length}</p>
                 <button onClick={() => {
-                    console.log(selectedPlaylist)
+                    history.push({pathname: `playlists/${selectedPlaylist}`, data})
                 }}>Plot</button>
             </PlaylistsInfoContainer>
         </Grid>

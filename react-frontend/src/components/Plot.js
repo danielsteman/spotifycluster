@@ -1,10 +1,10 @@
 import Plot from 'react-plotly.js';
 import useWindowDimensions from '../hooks/useWinDims'
 
-const ScatterPlot = ( {data, Xdim, Ydim, Zdim} ) => {
+const ScatterPlot = ( {data, labels, Xdim, Ydim, Zdim} ) => {
 
     // first item in tuple in data.titles is the song name, the second item is the artist
-    const artistsAndTitles = data.titles.map(track => `${track[0]} - ${track[1]}`)
+    // const artistsAndTitles = data.titles.map(track => `${track[0]} - ${track[1]}`)
 
     // use custom hook to retrieve fullscreen measurements
     const { height, width } = useWindowDimensions()
@@ -31,10 +31,10 @@ const ScatterPlot = ( {data, Xdim, Ydim, Zdim} ) => {
                     z: Zdim,
                     type: 'scatter3d',
                     mode: 'markers',
-                    marker: {color: data.labels, symbol: 'circle'},
+                    marker: {color: labels, symbol: 'circle'},
                     hoverlabel: {bgcolor: 'grey'},
                     hoverinfo: 'text',
-                    text: artistsAndTitles,
+                    // text: artistsAndTitles,
                 }
             ]}
             layout={ {

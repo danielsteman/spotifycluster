@@ -1,4 +1,4 @@
-import './Login.css'
+import './Login.css';
 
 const Login = ( {handleLogin} ) => {
     return (

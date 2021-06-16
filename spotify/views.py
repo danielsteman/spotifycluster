@@ -108,3 +108,13 @@ class getTrackTitles(APIView):
         response = get_track_titles(playlist_id)
 
         return Response(response, status=status.HTTP_200_OK)
+
+class getLabels(APIView):
+    def post(self, request, format=None):
+        session_id = request.session.session_key
+        model = request.headers.get('Model')
+        body = request.body.decode('utf-8')
+        features = json.loads(body)
+        response = get_labels(session_id, model, features)
+
+        return Response(response, status=status.HTTP_200_OK)

@@ -6,8 +6,15 @@ import './Playlist.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 
-const Playlist = () => {
+const Playlist = ({ getLabels, labels }) => {
+
+    const models = {
+        'K-means': {'params': {'n_clusters': 0}},
+        'Affinity Propagation': {'params': {'max_iter': 5000, 'convergence_iter': 150}},
+        'Mean Shift': {'params': {'n_jobs': -1}}
+    }
 
     const dimensionOptions = {
         TSNE1: {array: 'TSNE_features', index: 0},
@@ -46,7 +53,6 @@ const Playlist = () => {
         setSelectedDimX(location.data.TSNE_features.map(x => x[0]))
         setSelectedDimY(location.data.TSNE_features.map(x => x[1]))
         setSelectedDimZ(location.data.TSNE_features.map(x => x[2]))
-        console.log(location.data)
     }, [location.data, data])
 
     const selectDims = (axis, value, dim) => {
@@ -85,14 +91,32 @@ const Playlist = () => {
                         >
                             {Object.entries(dimensionOptions).map(([dim, value]) =>
                                 <div key={dim}>
-                                    <Dropdown.Item eventKey={dim} onClick={() => {selectDims(axis, value, dim)}}>{dim}</Dropdown.Item>
+                                    <Dropdown.Item 
+                                        eventKey={dim} 
+                                        onClick={() => {selectDims(axis, value, dim)}}
+                                    >{dim}</Dropdown.Item>
                                 </div>
                             )}
                         </DropdownButton>
                     </div>
                 ))}
+                <DropdownButton title='Model Selector'>
+                    {Object.keys(models).map((model, index) => (
+                        <DropdownItem 
+                            eventKey={model}
+                            key={index}
+                            onClick={() => getLabels(model)}
+                        >{model}</DropdownItem>
+                    ))}
+                </DropdownButton>
             </div>
-            <ScatterPlot data={data} Xdim={selectedDimX} Ydim={selectedDimY} Zdim={selectedDimZ}/>
+            <ScatterPlot 
+                data={data}
+                labels={labels} 
+                Xdim={selectedDimX}
+                Ydim={selectedDimY}
+                Zdim={selectedDimZ}
+            />
         </div>
     )
 }

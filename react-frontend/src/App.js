@@ -86,6 +86,8 @@ const App = ({ loading, showLoading, hideLoading }) => {
     setIds([])
     setLabels([])
 
+    const features = []
+
     const getPlaylistDataRecursively = (url) => {
       return fetch('/spotify/get-track-ids', {headers: {
         'url': url
@@ -98,15 +100,28 @@ const App = ({ loading, showLoading, hideLoading }) => {
         setTitles(titles => ([...titles, ...data.title]))
         setArtists(artists => ([...artists, ...data.artist]))
         setFeatures(features => ([...features, ...data.features]))
-        setTSNEfeatures(TSNEfeatures => ([...TSNEfeatures, ...data.TSNE_features]))
         setIds(ids => ([...ids, ...data.track_ids]))
+        features.push(data.features)
 
         if (data.next_url) {
           const next_url = data.next_url.replace('https://api.spotify.com/v1', '')
           return getPlaylistDataRecursively(next_url)
+        } else {
+          return fetch('/spotify/get-dimension-reduction', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(features.flat())
+          })
+          .then(response => response.json())
+          .then(data => {
+            setTSNEfeatures(data)
+          })
         }
       })
     }
+
     return getPlaylistDataRecursively(`/playlists/${playlistId}/tracks/?offset=0&limit=100`)
       .then(() => {
         hideLoading()

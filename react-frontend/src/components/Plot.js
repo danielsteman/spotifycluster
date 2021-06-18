@@ -34,7 +34,7 @@ const ScatterPlot = ( {data, labels, Xdim, Ydim, Zdim} ) => {
                     marker: {color: labels, symbol: 'circle'},
                     hoverlabel: {bgcolor: 'grey'},
                     hoverinfo: 'text',
-                    // text: artistsAndTitles,
+                    text: data.dataPointLabels
                 }
             ]}
             layout={ {

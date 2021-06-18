@@ -14,16 +14,14 @@ const PlaylistsCoversContainer = styled.div`
 const PlaylistsCover = styled.img`
     height: 350px;
     width: 350px;
-    float: left;
     margin-left: 50%;
     transform: translate(-50%);
-    clear: left;
     padding: 1em;
 `
 
 const PlaylistsInfoContainer = styled.div`
-    position: fixed;
-    margin-left: 50%;
+    grid-row-start: 1;
+    grid-column-start: 2;
     margin-top: 5em;
     padding: 1em;
     color: white;
@@ -43,7 +41,11 @@ const Covers = ({
     setSelectPlaylistId,
     getLabels }) => {
 
-    const data = {'titles': titles, 'artists': artists, 'TSNE_features': TSNEfeatures, 'features': features}
+    const dataPointLabels = artists.map((artist, index) => {
+        return `${artist} - ${titles[index]}`
+    })
+
+    const data = {'dataPointLabels': dataPointLabels, 'TSNE_features': TSNEfeatures, 'features': features}
 
     const history = useHistory()
 

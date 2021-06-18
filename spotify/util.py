@@ -163,7 +163,6 @@ def get_tracks(session_id, url):
     artists = [', '.join([artist.get('name') for artist in track.get('track').get('artists')]) for track in response_dropna]
     titles = [track.get('track').get('name') for track in response_dropna]
     features = get_features(session_id, track_ids)
-    TSNE_features = TSNE_reduce(features)
     try:
         next_url = response.get('next')
     except:
@@ -173,7 +172,6 @@ def get_tracks(session_id, url):
         'artist': artists,
         'title': titles,
         'features': features,
-        'TSNE_features': TSNE_features,
         'next_url': next_url
     }
     return output

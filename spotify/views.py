@@ -7,7 +7,7 @@ from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from .util import *
-from .cluster import *
+from .cluster import TSNE_reduce
 from django.http import JsonResponse
 
 class AuthURL(APIView):
@@ -109,6 +109,15 @@ class getTrackTitles(APIView):
 
         return Response(response, status=status.HTTP_200_OK)
 
+class getDimensionReduction(APIView):
+    def post(self, request, format=None):
+        session_id = request.session.session_key
+        body = request.body.decode('utf-8')
+        features = json.loads(body)
+        response = TSNE_reduce(features)
+
+        return Response(response, status=status.HTTP_200_OK)
+
 class getLabels(APIView):
     def post(self, request, format=None):
         session_id = request.session.session_key
@@ -116,5 +125,6 @@ class getLabels(APIView):
         body = request.body.decode('utf-8')
         features = json.loads(body)
         response = get_labels(session_id, model, features)
-
+        
         return Response(response, status=status.HTTP_200_OK)
+

@@ -67,45 +67,12 @@ class userProfile(APIView):
         endpoint = '/me'
         response = execute_spotify_api_request(session_id, endpoint)
         return Response({'user_profile': response}, status=status.HTTP_200_OK)
-        
-class getFeatures(APIView):
-    def get(self, request, format=None):
-        session_id = request.session.session_key
-        playlist_id = request.headers.get('id')
-        response = get_track_features_and_titles(session_id, playlist_id)
-
-        return Response(response, status=status.HTTP_200_OK)
-
-# class getTrackIds(APIView):
-#     def get(self, request, format=None):
-#         session_id = request.session.session_key
-#         playlist_id = request.headers.get('id')
-#         response = get_tracks(session_id, playlist_id)
-
-#         return Response(response, status=status.HTTP_200_OK)
 
 class getTrackIds(APIView):
     def get(self, request, format=None):
         session_id = request.session.session_key
         url = request.headers.get('url')
         response = get_tracks(session_id, url)
-
-        return Response(response, status=status.HTTP_200_OK)
-
-class getTrackFeatures(APIView):
-    def get(self, request, format=None):
-        session_id = request.session.session_key
-        # tracks are returned as comma-separated string
-        tracks = request.headers.get('tracks').split(',')
-        response = tracks
-
-        return Response(response, status=status.HTTP_200_OK)
-
-class getTrackTitles(APIView):
-    def get(self, request, format=None):
-        session_id = request.session.session_key
-        playlist_id = request.headers.get('id')
-        response = get_track_titles(playlist_id)
 
         return Response(response, status=status.HTTP_200_OK)
 

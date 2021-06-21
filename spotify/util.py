@@ -130,6 +130,6 @@ def get_labels(session_id, model, features):
     elif model == 'Mean Shift':
         labels = MeanShift_labeler(features)
     else:
-        return 'Model is not included in cluster model module'
+        return print('Model is not included in cluster model module')
 
     return labels

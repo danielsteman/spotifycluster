@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
-    'spotify.apps.SpotifyConfig',
-    'kombu.transport.django'
+    'spotify.apps.SpotifyConfig'
 ]
 
 MIDDLEWARE = [

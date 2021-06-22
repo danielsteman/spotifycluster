@@ -7,7 +7,7 @@ from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from .util import *
-from .cluster import TSNE_reduce
+from .machine_learning import TSNE_reduce, PCA_reduce
 from django.http import JsonResponse
 
 class AuthURL(APIView):
@@ -81,7 +81,8 @@ class getDimensionReduction(APIView):
         session_id = request.session.session_key
         body = request.body.decode('utf-8')
         features = json.loads(body)
-        response = TSNE_reduce(features)
+        # response = TSNE_reduce(features)
+        response = PCA_reduce(features)
 
         return Response(response, status=status.HTTP_200_OK)
 

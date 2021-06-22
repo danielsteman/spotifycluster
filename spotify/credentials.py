@@ -6,6 +6,6 @@ CLIENT_SECRET = "b0fd34a734ed4fc48056d114d0205803"
 # PRODUCTION: http://nameless-taiga-02413.herokuapp.com/spotify/redirect
 # DEVELOPMENT: http://127.0.0.1:8000/spotify/redirect
 
-REDIRECT_URI = 'http://127.0.0.1:8000/spotify/redirect'
+REDIRECT_URI = 'http://nameless-taiga-02413.herokuapp.com/spotify/redirect'
 # needs to be http://nameless-taiga-02413.herokuapp.com/ in production
 URL = 'http://127.0.0.1:8000'

@@ -7,13 +7,16 @@ const Grid = styled.div`
 `
 
 const PlaylistsCoversContainer = styled.div`
-    padding: 1em;
-    margin-top: 3em;
+    grid-row-start: 1;
+    grid-column-start: 1;
+    /* padding: 1em;
+    margin-top: 3em; */
 `
 
 const PlaylistsCover = styled.img`
-    height: 350px;
-    width: 350px;
+    object-fit: cover;
+    width: 100%;
+    max-height: 100%;
     margin-left: 50%;
     transform: translate(-50%);
     padding: 1em;
@@ -39,7 +42,7 @@ const Covers = ({
     playlistList, 
     selectedPlaylist, 
     setSelectPlaylistId,
-    getLabels }) => {
+    }) => {
 
     const dataPointLabels = artists.map((artist, index) => {
         return `${artist} - ${titles[index]}`
@@ -68,7 +71,7 @@ const Covers = ({
             </PlaylistsCoversContainer>
             <PlaylistsInfoContainer>
                 <h1>Hi, {userInfo.display_name}</h1>
-                <p>Choose playlist to analyse.</p>
+                <p>Tap a playlist to fetch its data</p>
                 <p>Playlist length: {titles.length}</p>
                 <button onClick={() => {
                     history.push({pathname: `playlists/${selectedPlaylist}`, data})

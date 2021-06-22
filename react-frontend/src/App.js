@@ -3,7 +3,6 @@ import Login from './components/Login'
 import Home from './components/Home'
 import Playlist from './components/Playlist'
 import LoadingScreen from './components/LoadingScreen'
-import Navigation from './components/Navigation'
 import React, { useState, useEffect } from "react";
 import './App.css'
 
@@ -153,7 +152,6 @@ const App = ({ loading, showLoading, hideLoading }) => {
   if (loading) { return <LoadingScreen/> }
   return (
     <div>
-      <Navigation/>
       <Switch>
         <Route path='/playlists/:id'>
           <Playlist

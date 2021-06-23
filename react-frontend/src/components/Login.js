@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 const LoginTitle = styled.div`
     color : white;
-    font-size: 6vw;
+    font-size: 7vw;
     font-family: 'Mulish', sans-serif;
     font-weight: 700;
 `
@@ -25,7 +25,7 @@ const blinkCaret = keyframes`
 const LoginTypewriter = styled.div`
     display: inline-block;
     color : white;
-    font-size: 6vw;
+    font-size: 7vw;
     font-family: 'Mulish', sans-serif;
     font-weight: 700;
 
@@ -47,7 +47,7 @@ const LoginContainer = styled.div`
     margin: 3em;
 `
 
-const LoginButton = styled.div`
+const LoginButton = styled.button`
     padding: 1em;
     margin-top: 1em;
     margin-left: 50%;
@@ -55,11 +55,12 @@ const LoginButton = styled.div`
 
     font-family: 'Mulish', sans-serif;
     font-weight: 700;
-    font-size: 2vw;    
+    font-size: 3vw;    
     color: white;
     
     border: 7px solid;
     border-color: white;
+    background-color: black;
     width: max-content;
 `
 

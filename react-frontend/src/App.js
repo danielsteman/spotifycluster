@@ -3,6 +3,7 @@ import Login from './components/Login'
 import Home from './components/Home'
 import Playlist from './components/Playlist'
 import LoadingScreen from './components/LoadingScreen'
+import ErrorScreen from './components/ErrorScreen'
 import React, { useState, useEffect } from "react";
 import './App.css'
 
@@ -179,6 +180,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
             getLabels={getLabels}
           />
         </Route>
+        <Route component={ErrorScreen} />
       </Switch>
     </div>
   )

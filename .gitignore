@@ -1,2 +1,23 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+spotify/__pycache__
+staticfiles
+
+# Installer logs 
+pip-log.txt 
+pip-delete-this-directory.txt 
+
+# React
+react-frontend/build
+react-frontend/node_modules
 node_modules
+
+# Global
+env
 .env
+venv
+.venv

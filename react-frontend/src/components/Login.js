@@ -62,6 +62,10 @@ const LoginButton = styled.button`
     border-color: white;
     background-color: black;
     width: max-content;
+
+    @media screen and (max-width: 500px) {
+        margin-top: 12em;
+    }
 `
 
 const Login = ( {handleLogin} ) => {

@@ -110,7 +110,7 @@ const Playlist = ({ getLabels, labels }) => {
                     ))}
                 </DropdownButton>
             </div>
-            <ScatterPlot 
+            <ScatterPlot
                 data={data}
                 labels={labels} 
                 Xdim={selectedDimX}

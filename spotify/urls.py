@@ -9,5 +9,6 @@ urlpatterns = [
     path('user-profile', userProfile.as_view()),
     path('get-track-ids', getTrackIds.as_view()),
     path('get-labels', getLabels.as_view()),
-    path('get-dimension-reduction', getDimensionReduction.as_view())
+    path('get-dimension-reduction', getDimensionReduction.as_view()),
+    path('celery-task', celeryTask.as_view())
 ]

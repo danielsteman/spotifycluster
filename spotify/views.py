@@ -1,14 +1,15 @@
-import os
 import json
-from django.shortcuts import render, redirect
-from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID, URL
+from django.shortcuts import redirect
+from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 from rest_framework.views import APIView
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from .util import *
 from .machine_learning import TSNE_reduce, PCA_reduce
-from django.http import JsonResponse
+from .tasks import AffinityPropagation_task
+
+from celery.result import AsyncResult
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -78,21 +79,34 @@ class getTrackIds(APIView):
 
 class getDimensionReduction(APIView):
     def post(self, request, format=None):
-        session_id = request.session.session_key
         body = request.body.decode('utf-8')
         features = json.loads(body)
-        # response = TSNE_reduce(features)
         response = PCA_reduce(features)
 
         return Response(response, status=status.HTTP_200_OK)
 
 class getLabels(APIView):
     def post(self, request, format=None):
-        session_id = request.session.session_key
         model = request.headers.get('Model')
         body = request.body.decode('utf-8')
         features = json.loads(body)
-        response = get_labels(session_id, model, features)
+        response = get_labels(model, features)
         
         return Response(response, status=status.HTTP_200_OK)
 
+class celeryTask(APIView):
+    def post(self, request, format=None):
+
+        body_decoded = request.body.decode('utf-8')
+        body = json.loads(body_decoded)
+        features = body['features']
+        task = AffinityPropagation_task.delay(features)
+        response = task.task_id
+                
+        return Response(response, status=status.HTTP_200_OK)
+
+class celeryResult(APIView):
+    def get(self, request, format=None):
+        task_id = request.headers.get('taskId')
+        res = AsyncResult(id=task_id)
+        return res.ready()

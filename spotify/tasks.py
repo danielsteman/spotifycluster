@@ -4,7 +4,11 @@ from celery import shared_task
 
 import time
 
-@shared_task(bind=True)
-def add(x, y):
-    time.sleep(10)
-    return x + y
+from .machine_learning import AffinityPropagation_labeler
+
+@shared_task(trail=True)
+def AffinityPropagation_task(X):
+    task = AffinityPropagation_labeler(X)
+
+    return 'task initiated'
+

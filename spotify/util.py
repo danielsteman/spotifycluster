@@ -3,7 +3,6 @@ from django.utils import timezone
 from datetime import timedelta
 from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
-import math
 from .machine_learning import TSNE_reduce, KMeans_labeler, MeanShift_labeler, AffinityPropagation_labeler
 
 BASE_URL = 'https://api.spotify.com/v1'
@@ -122,7 +121,7 @@ def get_tracks(session_id, url):
     }
     return output
 
-def get_labels(session_id, model, features):
+def get_labels(model, features):
     if model == 'K-means':
         labels = KMeans_labeler(features)
     elif model == 'Affinity Propagation':

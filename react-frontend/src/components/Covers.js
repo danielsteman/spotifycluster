@@ -125,6 +125,21 @@ const Covers = ({
                         }}>Plot</PlotButton>
                     </div>
                 }
+                <PlotButton 
+                    onClick={() => {
+                        fetch('/spotify/celery-task', {
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                'features': [[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9]]
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => console.log(data))
+                    }}
+                >Celery</PlotButton>
             </PlaylistsInfoContainer>
         </Grid>
     )

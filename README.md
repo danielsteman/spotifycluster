@@ -43,3 +43,8 @@ liveness
 valence
 tempo
  ```
+
+### Launch commands
+brew services start rabbitmq
+celery -A spotifycluster worker --loglevel=INFO
+python manage.py runserver

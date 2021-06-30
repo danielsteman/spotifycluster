@@ -1,5 +1,6 @@
 import json
 from django.shortcuts import redirect
+from rest_framework import response
 from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 from rest_framework.views import APIView
 from requests import Request, post
@@ -105,8 +106,19 @@ class celeryTask(APIView):
                 
         return Response(response, status=status.HTTP_200_OK)
 
-class celeryResult(APIView):
-    def get(self, request, format=None):
+class celeryStatus(APIView):
+    def post(self, request, format=None):
         task_id = request.headers.get('taskId')
-        res = AsyncResult(id=task_id)
-        return res.ready()
+        if len(task_id) > 0:
+            res = AsyncResult(id=task_id)
+            res_object = {
+                'state': res.state
+            }
+            response = res_object
+        elif len(task_id) == 0:
+            response = 'no task was initiated'
+        else:
+            response = 'something went wrong'
+
+        return Response(response, status=status.HTTP_200_OK)
+        

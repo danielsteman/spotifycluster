@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useHistory } from 'react-router-dom';
+// import { useState } from "react";
 
 const Grid = styled.div`
     display: grid;
@@ -84,6 +85,8 @@ const Covers = ({
     setSelectPlaylistId,
     }) => {
 
+    // const [taskId, setTaskId] = useState('')
+
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
@@ -125,7 +128,7 @@ const Covers = ({
                         }}>Plot</PlotButton>
                     </div>
                 }
-                <PlotButton 
+                {/* <PlotButton 
                     onClick={() => {
                         fetch('/spotify/celery-task', {
                             method: 'POST',
@@ -133,13 +136,29 @@ const Covers = ({
                             'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                'features': [[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9]]
+                                'features': [2,2]
                             })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            setTaskId(data)
+                        })
+                    }}
+                >Celery start</PlotButton>
+                <PlotButton 
+                    onClick={() => {
+                        fetch('/spotify/celery-status', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'taskId': taskId
+                            }
                         })
                         .then(response => response.json())
                         .then(data => console.log(data))
                     }}
-                >Celery</PlotButton>
+                >Celery status</PlotButton> */}
             </PlaylistsInfoContainer>
         </Grid>
     )

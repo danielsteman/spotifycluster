@@ -28,6 +28,9 @@ const PlaylistsCover = styled.img`
 const PlaylistsInfoContainer = styled.div`
     grid-row-start: 1;
     grid-column-start: 2;
+    position: sticky;
+    top: 0;
+    height: 100vh;
     padding: calc(1em + 2vh);
     color: white;
 `

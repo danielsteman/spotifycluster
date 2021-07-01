@@ -104,7 +104,7 @@ const Playlist = ({ getLabels, labels }) => {
                         >
                             {Object.entries(dimensionOptions).map(([dim, value]) =>
                                 <div key={dim}>
-                                    <Dropdown.Item 
+                                    <Dropdown.Item
                                         eventKey={dim} 
                                         onClick={() => {selectDims(axis, value, dim)}}
                                     >{dim}</Dropdown.Item>

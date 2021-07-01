@@ -23,7 +23,7 @@ const ScatterPlot = ( {data, labels, Xdim, Ydim, Zdim} ) => {
 
     return (
         <Plot
-            style={{transform: 'scale(1.25)'}}
+            style={{transform: 'scale(1.3)'}}
             config={{displayModeBar: false}}
             data={[
                 {

@@ -11,8 +11,7 @@ import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 const ButtonContainer = styled.div`
     position: absolute;
     z-index: 1;
-    background-color: black;
-    padding: 20px;
+    background-color: transparent;
     text-align: center;
     width: 100%;
     display: flex;

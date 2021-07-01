@@ -16,7 +16,10 @@ const ButtonContainer = styled.div`
     text-align: center;
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    width: 50%;
+    left: 50%;
+    transform: translateX(-50%)
 `
 
 const Playlist = ({ getLabels, labels }) => {
@@ -96,7 +99,6 @@ const Playlist = ({ getLabels, labels }) => {
             <ButtonContainer>
                 {axes.map((axis, index) => (
                     <div key={index} style={{color: 'white'}}>
-                        {axis}
                         <DropdownButton
                             title={buttonTitle(axis)}
                         >

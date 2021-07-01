@@ -104,7 +104,7 @@ def get_features(session_id, tracks):
 def get_tracks(session_id, url):
     response = execute_spotify_api_request(session_id, url)
     response_dropna = [x for x in response.get('items')]
-    track_ids = [track.get('track').get('id') for track in response_dropna]
+    track_ids = [track.get('track').get('id') for track in response_dropna if track.get('track').get('id') != None]
     artists = [', '.join([artist.get('name') for artist in track.get('track').get('artists')]) for track in response_dropna]
     titles = [track.get('track').get('name') for track in response_dropna]
     features = get_features(session_id, track_ids)

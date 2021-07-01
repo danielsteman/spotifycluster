@@ -102,8 +102,6 @@ const Covers = ({
 
     const history = useHistory()
 
-    // history.push({pathname: `playlists/${playlistId}`, data})
-
     return(
         <Grid>
             <PlaylistsCoversContainer>

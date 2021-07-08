@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useHistory } from 'react-router-dom';
-// import { useState } from "react";
+import { useState } from "react";
 
 const Grid = styled.div`
     display: grid;
@@ -88,7 +88,7 @@ const Covers = ({
     setSelectPlaylistId,
     }) => {
 
-    // const [taskId, setTaskId] = useState('')
+    const [taskId, setTaskId] = useState('')
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -129,7 +129,7 @@ const Covers = ({
                         }}>Plot</PlotButton>
                     </div>
                 }
-                {/* <PlotButton 
+                <PlotButton 
                     onClick={() => {
                         fetch('/spotify/celery-task', {
                             method: 'POST',
@@ -157,9 +157,12 @@ const Covers = ({
                             }
                         })
                         .then(response => response.json())
-                        .then(data => console.log(data))
+                        .then(data => {
+                            console.log(taskId)
+                            console.log(data)
+                        })
                     }}
-                >Celery status</PlotButton> */}
+                >Celery status</PlotButton>
             </PlaylistsInfoContainer>
         </Grid>
     )

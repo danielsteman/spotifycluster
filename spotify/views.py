@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from .util import *
 from .machine_learning import TSNE_reduce, PCA_reduce
 from .tasks import AffinityPropagation_task
+from spotifycluster.celery import app
 
 from celery.result import AsyncResult
 
@@ -101,6 +102,7 @@ class celeryTask(APIView):
         body_decoded = request.body.decode('utf-8')
         body = json.loads(body_decoded)
         features = body['features']
+        
         task = AffinityPropagation_task.delay(features)
         response = task.task_id
                 
@@ -110,7 +112,7 @@ class celeryStatus(APIView):
     def post(self, request, format=None):
         task_id = request.headers.get('taskId')
         if len(task_id) > 0:
-            res = AsyncResult(id=task_id)
+            res = AsyncResult(id=task_id, app=app)
             res_object = {
                 'state': res.state
             }

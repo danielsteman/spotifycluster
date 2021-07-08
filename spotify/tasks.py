@@ -1,16 +1,10 @@
-from __future__ import absolute_import, unicode_literals
-
-from celery import shared_task
-
+from celery import Celery
+from .machine_learning import AffinityPropagation_labeler
 import time
 
-from .machine_learning import AffinityPropagation_labeler
+app = Celery('spotifycluster', broker='amqp://guest@localhost//')
 
-@shared_task(bind=True)
-def AffinityPropagation_task(self, X):
-    self.update_state(state='PENDING')
+@app.task
+def AffinityPropagation_task(X):
     time.sleep(2)
-    print (X)
-    output = sum(X)
-    self.update_state(state='COMPLETE')
-    return output
+    return sum(X)

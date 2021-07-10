@@ -75,6 +75,18 @@ const App = ({ loading, showLoading, hideLoading }) => {
     })
   }
 
+  const getTaskResult = (taskId) => {
+    return fetch('/spotify/task-result', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'taskId': taskId
+      }
+    })
+    .then(response => response.json())
+    .then(data => data)
+  }
+
   const fetchPlaylist = (playlistId) => {
 
     showLoading()
@@ -107,17 +119,37 @@ const App = ({ loading, showLoading, hideLoading }) => {
           const next_url = data.next_url.replace('https://api.spotify.com/v1', '')
           return getPlaylistDataRecursively(next_url)
         } else {
-          return fetch('/spotify/get-dimension-reduction', {
+
+          return fetch('/spotify/dimension-reduction-async', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(features.flat())
+            body: JSON.stringify({
+              'features': features.flat()
+            })
           })
           .then(response => response.json())
           .then(data => {
             console.log(data)
-            setTSNEfeatures(data)
+
+            const interval = setInterval(() => {
+              fetch('/spotify/task-result', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'taskId': data
+                }
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data)
+                if (data.state === 'SUCCESS') {
+                  setTSNEfeatures(data.result)
+                  clearInterval(interval)
+                }
+              })
+            }, 3000)
           })
         }
       })

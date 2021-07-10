@@ -11,6 +11,6 @@ urlpatterns = [
     path('get-labels', getLabels.as_view()),
     path('get-dimension-reduction', getDimensionReduction.as_view()),
     path('celery-task', celeryTask.as_view()),
-    path('task-status', celeryStatus.as_view()),
+    path('task-result', taskStatus.as_view()),
     path('dimension-reduction-async', startDimensionReductionAsync.as_view())
 ]

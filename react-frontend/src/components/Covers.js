@@ -149,7 +149,7 @@ const Covers = ({
                 >Celery start</PlotButton>
                 <PlotButton 
                     onClick={() => {
-                        fetch('/spotify/task-status', {
+                        fetch('/spotify/task-result', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

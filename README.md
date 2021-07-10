@@ -19,9 +19,9 @@ styled-components
 plotly.js
 
 #### Backend
-django
-celery
-rabbitmq
+django  
+celery  
+rabbitmq  
 
 #### Machine Learning
 sklearn

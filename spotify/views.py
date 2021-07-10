@@ -106,21 +106,7 @@ class startDimensionReductionAsync(APIView):
                 
         return Response(response, status=status.HTTP_200_OK)
 
-#### celery demo        
-
-class celeryTask(APIView):
-    def post(self, request, format=None):
-
-        body_decoded = request.body.decode('utf-8')
-        body = json.loads(body_decoded)
-        features = body['features']
-        
-        task = AffinityPropagation_task.delay(features)
-        response = task.task_id
-                
-        return Response(response, status=status.HTTP_200_OK)
-
-class celeryStatus(APIView):
+class taskStatus(APIView):
     def post(self, request):
         task_id = request.headers.get('taskId')
         if len(task_id) > 0:
@@ -135,4 +121,18 @@ class celeryStatus(APIView):
             response = 'something went wrong'
 
         return Response(response, status=status.HTTP_200_OK)
+
+#### celery demo        
+
+class celeryTask(APIView):
+    def post(self, request, format=None):
+
+        body_decoded = request.body.decode('utf-8')
+        body = json.loads(body_decoded)
+        features = body['features']
         
+        task = AffinityPropagation_task.delay(features)
+        response = task.task_id
+                
+        return Response(response, status=status.HTTP_200_OK)
+

@@ -7,11 +7,9 @@ from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from .util import *
-from .machine_learning import TSNE_reduce, PCA_reduce
-from .tasks import AffinityPropagation_task
+from .machine_learning import PCA_reduce
 from spotifycluster.celery import app
-
-from celery.result import AsyncResult
+from .tasks import AffinityPropagation_task, TSNE_reduce_async
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -96,6 +94,20 @@ class getLabels(APIView):
         
         return Response(response, status=status.HTTP_200_OK)
 
+class startDimensionReductionAsync(APIView):
+    def post(self, request, format=None):
+
+        body_decoded = request.body.decode('utf-8')
+        body = json.loads(body_decoded)
+        features = body['features']
+        
+        task = TSNE_reduce_async.delay(features)
+        response = task.task_id
+                
+        return Response(response, status=status.HTTP_200_OK)
+
+#### celery demo        
+
 class celeryTask(APIView):
     def post(self, request, format=None):
 
@@ -109,14 +121,14 @@ class celeryTask(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
 class celeryStatus(APIView):
-    def post(self, request, format=None):
+    def post(self, request):
         task_id = request.headers.get('taskId')
         if len(task_id) > 0:
-            res = AsyncResult(id=task_id, app=app)
-            res_object = {
-                'state': res.state
+            result = app.AsyncResult(id=task_id)
+            response = {
+                'state': result.state,
+                'result': result.result
             }
-            response = res_object
         elif len(task_id) == 0:
             response = 'no task was initiated'
         else:

@@ -152,6 +152,9 @@ options = DATABASES['default'].get('OPTIONS', {})
 options.pop('sslmode', None)
 
 # Celery Configuration Options
+CELERY_IMPORTS = [
+    'spotify.tasks'
+]
 CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60

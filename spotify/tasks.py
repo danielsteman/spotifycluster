@@ -1,10 +1,16 @@
-from celery import Celery
-from .machine_learning import AffinityPropagation_labeler
-import time
+from celery import shared_task
+from spotifycluster.celery import app
+from .machine_learning import TSNE_reduce
 
-app = Celery('spotifycluster', broker='amqp://guest@localhost//')
-
-@app.task
+@app.task(trail=True)
 def AffinityPropagation_task(X):
-    time.sleep(2)
     return sum(X)
+
+@shared_task
+def TSNE_reduce_async(X):
+    result = TSNE_reduce(X)
+    # Convert to list to make it JSON serializable
+    list_result = result.tolist()
+    return list_result
+
+

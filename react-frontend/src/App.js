@@ -116,6 +116,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
           })
           .then(response => response.json())
           .then(data => {
+            console.log(data)
             setTSNEfeatures(data)
           })
         }

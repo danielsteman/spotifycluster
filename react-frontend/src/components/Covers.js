@@ -131,13 +131,13 @@ const Covers = ({
                 }
                 <PlotButton 
                     onClick={() => {
-                        fetch('/spotify/celery-task', {
+                        fetch('/spotify/dimension-reduction-async', {
                             method: 'POST',
                             headers: {
                             'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                'features': [2,2]
+                                'features': features
                             })
                         })
                         .then(response => response.json())
@@ -149,7 +149,7 @@ const Covers = ({
                 >Celery start</PlotButton>
                 <PlotButton 
                     onClick={() => {
-                        fetch('/spotify/celery-status', {
+                        fetch('/spotify/task-status', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

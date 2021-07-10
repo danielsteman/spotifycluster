@@ -12,18 +12,22 @@ Documentation: https://developer.spotify.com/documentation/general/guides/author
 
 ## Technology :technologist:
 
-#### Backend
-django  
-sklearn
-
-#### Database
-sqlite3
-
 #### Frontend
 react.js  
 react-router   
 styled-components  
 plotly.js
+
+#### Backend
+django
+celery
+rabbitmq
+
+#### Machine Learning
+sklearn
+
+#### Database
+sqlite3
 
 ## Data :bar_chart:
 
@@ -39,3 +43,8 @@ liveness
 valence
 tempo
  ```
+
+### Launch commands
+brew services start rabbitmq
+celery -A spotifycluster worker --loglevel=INFO
+python manage.py runserver

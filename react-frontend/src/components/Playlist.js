@@ -2,11 +2,24 @@ import { useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 import ScatterPlot from './Plot';
 import LoadingScreen from './LoadingScreen'
-import './Playlist.css'
+import styled from "styled-components";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
+
+const ButtonContainer = styled.div`
+    position: absolute;
+    z-index: 1;
+    background-color: transparent;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    left: 50%;
+    transform: translateX(-50%)
+`
 
 const Playlist = ({ getLabels, labels }) => {
 
@@ -82,16 +95,15 @@ const Playlist = ({ getLabels, labels }) => {
     
     return(
         <div>
-            <div className='buttonContainer'>
+            <ButtonContainer>
                 {axes.map((axis, index) => (
                     <div key={index} style={{color: 'white'}}>
-                        {axis}
                         <DropdownButton
                             title={buttonTitle(axis)}
                         >
                             {Object.entries(dimensionOptions).map(([dim, value]) =>
                                 <div key={dim}>
-                                    <Dropdown.Item 
+                                    <Dropdown.Item
                                         eventKey={dim} 
                                         onClick={() => {selectDims(axis, value, dim)}}
                                     >{dim}</Dropdown.Item>
@@ -109,8 +121,8 @@ const Playlist = ({ getLabels, labels }) => {
                         >{model}</DropdownItem>
                     ))}
                 </DropdownButton>
-            </div>
-            <ScatterPlot 
+            </ButtonContainer>
+            <ScatterPlot
                 data={data}
                 labels={labels} 
                 Xdim={selectedDimX}

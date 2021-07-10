@@ -1,14 +1,15 @@
-import os
 import json
-from django.shortcuts import render, redirect
-from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID, URL
+from django.shortcuts import redirect
+from rest_framework import response
+from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 from rest_framework.views import APIView
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from .util import *
-from .cluster import TSNE_reduce
-from django.http import JsonResponse
+from .machine_learning import PCA_reduce
+from spotifycluster.celery import app
+from .tasks import AffinityPropagation_task, TSNE_reduce_async
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -67,22 +68,6 @@ class userProfile(APIView):
         endpoint = '/me'
         response = execute_spotify_api_request(session_id, endpoint)
         return Response({'user_profile': response}, status=status.HTTP_200_OK)
-        
-class getFeatures(APIView):
-    def get(self, request, format=None):
-        session_id = request.session.session_key
-        playlist_id = request.headers.get('id')
-        response = get_track_features_and_titles(session_id, playlist_id)
-
-        return Response(response, status=status.HTTP_200_OK)
-
-# class getTrackIds(APIView):
-#     def get(self, request, format=None):
-#         session_id = request.session.session_key
-#         playlist_id = request.headers.get('id')
-#         response = get_tracks(session_id, playlist_id)
-
-#         return Response(response, status=status.HTTP_200_OK)
 
 class getTrackIds(APIView):
     def get(self, request, format=None):
@@ -92,39 +77,62 @@ class getTrackIds(APIView):
 
         return Response(response, status=status.HTTP_200_OK)
 
-class getTrackFeatures(APIView):
-    def get(self, request, format=None):
-        session_id = request.session.session_key
-        # tracks are returned as comma-separated string
-        tracks = request.headers.get('tracks').split(',')
-        response = tracks
-
-        return Response(response, status=status.HTTP_200_OK)
-
-class getTrackTitles(APIView):
-    def get(self, request, format=None):
-        session_id = request.session.session_key
-        playlist_id = request.headers.get('id')
-        response = get_track_titles(playlist_id)
-
-        return Response(response, status=status.HTTP_200_OK)
-
 class getDimensionReduction(APIView):
     def post(self, request, format=None):
-        session_id = request.session.session_key
         body = request.body.decode('utf-8')
         features = json.loads(body)
-        response = TSNE_reduce(features)
+        response = PCA_reduce(features)
 
         return Response(response, status=status.HTTP_200_OK)
 
 class getLabels(APIView):
     def post(self, request, format=None):
-        session_id = request.session.session_key
         model = request.headers.get('Model')
         body = request.body.decode('utf-8')
         features = json.loads(body)
-        response = get_labels(session_id, model, features)
+        response = get_labels(model, features)
         
         return Response(response, status=status.HTTP_200_OK)
 
+class startDimensionReductionAsync(APIView):
+    def post(self, request, format=None):
+
+        body_decoded = request.body.decode('utf-8')
+        body = json.loads(body_decoded)
+        features = body['features']
+        
+        task = TSNE_reduce_async.delay(features)
+        response = task.task_id
+                
+        return Response(response, status=status.HTTP_200_OK)
+
+#### celery demo        
+
+class celeryTask(APIView):
+    def post(self, request, format=None):
+
+        body_decoded = request.body.decode('utf-8')
+        body = json.loads(body_decoded)
+        features = body['features']
+        
+        task = AffinityPropagation_task.delay(features)
+        response = task.task_id
+                
+        return Response(response, status=status.HTTP_200_OK)
+
+class celeryStatus(APIView):
+    def post(self, request):
+        task_id = request.headers.get('taskId')
+        if len(task_id) > 0:
+            result = app.AsyncResult(id=task_id)
+            response = {
+                'state': result.state,
+                'result': result.result
+            }
+        elif len(task_id) == 0:
+            response = 'no task was initiated'
+        else:
+            response = 'something went wrong'
+
+        return Response(response, status=status.HTTP_200_OK)
+        

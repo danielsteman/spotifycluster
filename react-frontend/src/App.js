@@ -75,18 +75,6 @@ const App = ({ loading, showLoading, hideLoading }) => {
     })
   }
 
-  const getTaskResult = (taskId) => {
-    return fetch('/spotify/task-result', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'taskId': taskId
-      }
-    })
-    .then(response => response.json())
-    .then(data => data)
-  }
-
   const fetchPlaylist = (playlistId) => {
 
     showLoading()

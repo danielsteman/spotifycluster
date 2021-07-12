@@ -129,7 +129,7 @@ const Covers = ({
                         }}>Plot</PlotButton>
                     </div>
                 }
-                <PlotButton 
+                {/* <PlotButton 
                     onClick={() => {
                         fetch('/spotify/dimension-reduction-async', {
                             method: 'POST',
@@ -162,7 +162,7 @@ const Covers = ({
                             console.log(data)
                         })
                     }}
-                >Celery status</PlotButton>
+                >Celery status</PlotButton> */}
             </PlaylistsInfoContainer>
         </Grid>
     )

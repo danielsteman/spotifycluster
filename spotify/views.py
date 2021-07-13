@@ -94,8 +94,8 @@ class getLabels(APIView):
         
         return Response(response, status=status.HTTP_200_OK)
 
-class startDimensionReductionAsync(APIView):
-    def post(self, request, format=None):
+class DimensionReductionAsync(APIView):
+    def post(self, request):
 
         body_decoded = request.body.decode('utf-8')
         body = json.loads(body_decoded)

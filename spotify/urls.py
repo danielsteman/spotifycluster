@@ -1,5 +1,9 @@
-from django.urls import path 
+from django.urls import path, re_path
 from .views import *
+
+from django.views.generic.base import RedirectView
+
+favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
     path('get-auth-url', AuthURL.as_view()),
@@ -12,5 +16,7 @@ urlpatterns = [
     path('get-dimension-reduction', getDimensionReduction.as_view()),
     path('celery-task', celeryTask.as_view()),
     path('task-result', taskStatus.as_view()),
-    path('dimension-reduction-async', startDimensionReductionAsync.as_view())
+    path('dimension-reduction-async', DimensionReductionAsync.as_view()),
+    re_path(r'^favicon\.ico$', favicon_view)
 ]
+

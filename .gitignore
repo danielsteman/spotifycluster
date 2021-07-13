@@ -2,3 +2,5 @@ node_modules
 react-frontend/node_modules
 .env
 staticfiles
+__pycache__
+db.sqlite3

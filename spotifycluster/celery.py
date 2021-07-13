@@ -9,12 +9,9 @@ import time
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'spotifycluster.settings')
 
-app = Celery(
-    'spotifycluster',
-    backend='rpc://',
-    result_backend = 'rpc://',
-    broker='pyamqp://'
-)
+app = Celery('spotifycluster')
+
+app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.

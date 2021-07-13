@@ -29,7 +29,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = 'e@cy5%n+e2z5oo5$==0d(0s&l(kh+9ra)2alr#7-&_-g2%lnit'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 

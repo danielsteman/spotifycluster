@@ -1,6 +1,5 @@
 node_modules
 react-frontend/node_modules
-react-frontend/build
 .env
 staticfiles
 db.sqlite3

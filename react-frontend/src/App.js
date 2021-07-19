@@ -7,7 +7,7 @@ import ErrorScreen from './components/ErrorScreen'
 import React, { useState, useEffect } from "react";
 import './App.css'
 
-const App = ({ loading, showLoading, hideLoading }) => {
+const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
 
   const [authenticated, setAuthenticated] = useState(false)
 
@@ -59,7 +59,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
   }
 
   const getLabels = (model) => {
-    showLoading()
+    showLoading('Calculating labels...')
     fetch('/spotify/get-labels', {
       method: 'POST',
       headers: {
@@ -70,14 +70,32 @@ const App = ({ loading, showLoading, hideLoading }) => {
     })
     .then(response => response.json())
     .then(data => {
-      setLabels(data)
+
       hideLoading()
+
+      const interval = setInterval(() => {
+        fetch('/spotify/task-result', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'taskId': data
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          if (data.state === 'SUCCESS') {
+            setLabels(data.result)
+            clearInterval(interval)
+          }
+        })
+      }, 3000)
     })
   }
 
   const fetchPlaylist = (playlistId) => {
 
-    showLoading()
+    showLoading('Fetching tracks...')
 
     setTitles([])
     setArtists([])
@@ -107,17 +125,37 @@ const App = ({ loading, showLoading, hideLoading }) => {
           const next_url = data.next_url.replace('https://api.spotify.com/v1', '')
           return getPlaylistDataRecursively(next_url)
         } else {
-          return fetch('/spotify/get-dimension-reduction', {
+
+          return fetch('/spotify/dimension-reduction-async', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(features.flat())
+            body: JSON.stringify({
+              'features': features.flat()
+            })
           })
           .then(response => response.json())
           .then(data => {
             console.log(data)
-            setTSNEfeatures(data)
+
+            const interval = setInterval(() => {
+              fetch('/spotify/task-result', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'taskId': data
+                }
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data)
+                if (data.state === 'SUCCESS') {
+                  setTSNEfeatures(data.result)
+                  clearInterval(interval)
+                }
+              })
+            }, 3000)
           })
         }
       })
@@ -151,7 +189,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
     ? playlistList.find(playlist => playlist.id === Number(match.params.id))
     : null
 
-  if (loading) { return <LoadingScreen/> }
+  if (loading) { return <LoadingScreen loadingCaption={loadingCaption}/> }
   return (
     <div>
       <Switch>

@@ -1,6 +1,5 @@
 import json
 from django.shortcuts import redirect
-from rest_framework import response
 from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 from rest_framework.views import APIView
 from requests import Request, post
@@ -9,7 +8,7 @@ from rest_framework.response import Response
 from .util import *
 from .machine_learning import PCA_reduce
 from spotifycluster.celery import app
-from .tasks import AffinityPropagation_task, TSNE_reduce_async
+from .tasks import TSNE_reduce_async
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -94,8 +93,18 @@ class getLabels(APIView):
         
         return Response(response, status=status.HTTP_200_OK)
 
-class startDimensionReductionAsync(APIView):
-    def post(self, request, format=None):
+class labelsAsync(APIView):
+    def post(self, request):
+        model = request.headers.get('Model')
+        body = request.body.decode('utf-8')
+        features = json.loads(body)
+        task_id = start_labels_calculation_task(model, features)
+        response = task_id
+        
+        return Response(response, status=status.HTTP_200_OK)
+
+class dimensionReductionAsync(APIView):
+    def post(self, request):
 
         body_decoded = request.body.decode('utf-8')
         body = json.loads(body_decoded)
@@ -106,21 +115,7 @@ class startDimensionReductionAsync(APIView):
                 
         return Response(response, status=status.HTTP_200_OK)
 
-#### celery demo        
-
-class celeryTask(APIView):
-    def post(self, request, format=None):
-
-        body_decoded = request.body.decode('utf-8')
-        body = json.loads(body_decoded)
-        features = body['features']
-        
-        task = AffinityPropagation_task.delay(features)
-        response = task.task_id
-                
-        return Response(response, status=status.HTTP_200_OK)
-
-class celeryStatus(APIView):
+class taskStatus(APIView):
     def post(self, request):
         task_id = request.headers.get('taskId')
         if len(task_id) > 0:
@@ -135,4 +130,3 @@ class celeryStatus(APIView):
             response = 'something went wrong'
 
         return Response(response, status=status.HTTP_200_OK)
-        

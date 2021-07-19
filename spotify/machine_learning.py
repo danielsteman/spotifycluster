@@ -3,7 +3,7 @@ from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 
 def TSNE_reduce(X):
-    reduced_data = TSNE(n_components=3).fit_transform(X)
+    reduced_data = TSNE(n_components=3, verbose=3).fit_transform(X)
     return (reduced_data)
 
 def PCA_reduce(X):

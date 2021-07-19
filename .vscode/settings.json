@@ -1,0 +1,45 @@
+{
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "Django",
+                    "commands": ["source venv/bin/activate", "python manage.py runserver"]
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Django shell",
+                    "commands": ["source venv/bin/activate", "python manage.py shell"],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "React",
+                    "commands": ["cd react-frontend", "npm start"]
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Celery Worker",
+                    "commands": ["source venv/bin/activate", "celery -A spotifycluster worker --loglevel=INFO"]
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Git",
+                    "commands": ["git pull"]
+                }
+            ]
+        }
+    ]
+}

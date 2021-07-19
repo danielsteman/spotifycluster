@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useHistory } from 'react-router-dom';
-import { useState } from "react";
 
 const Grid = styled.div`
     display: grid;
@@ -78,7 +77,6 @@ const Covers = ({
     images, 
     selectPlaylist, 
     userInfo, 
-    ids, 
     titles, 
     artists, 
     features,
@@ -87,8 +85,6 @@ const Covers = ({
     selectedPlaylist, 
     setSelectPlaylistId,
     }) => {
-
-    const [taskId, setTaskId] = useState('')
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -124,45 +120,13 @@ const Covers = ({
                     && <div>
                         <PlaylistsInfoText>No. of songs: {titles.length}</PlaylistsInfoText>
                         <PlaylistsInfoText>No. of artists: {artists.filter(onlyUnique).length}</PlaylistsInfoText>
-                        <PlotButton onClick={() => {
-                            history.push({pathname: `playlists/${selectedPlaylist}`, data})
-                        }}>Plot</PlotButton>
+                        {TSNEfeatures.length > 0
+                            && <PlotButton onClick={() => {
+                                history.push({pathname: `playlists/${selectedPlaylist}`, data})
+                            }}>Plot</PlotButton>
+                        }
                     </div>
                 }
-                <PlotButton 
-                    onClick={() => {
-                        fetch('/spotify/dimension-reduction-async', {
-                            method: 'POST',
-                            headers: {
-                            'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                'features': features
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data)
-                            setTaskId(data)
-                        })
-                    }}
-                >Celery start</PlotButton>
-                <PlotButton 
-                    onClick={() => {
-                        fetch('/spotify/task-status', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'taskId': taskId
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(taskId)
-                            console.log(data)
-                        })
-                    }}
-                >Celery status</PlotButton>
             </PlaylistsInfoContainer>
         </Grid>
     )

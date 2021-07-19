@@ -1,4 +1,3 @@
-import os
 from spotifycluster.settings import DEBUG
 
 CLIENT_ID = "ee2e82f92836476196842f7b2818c559"

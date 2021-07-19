@@ -10,9 +10,20 @@ const Animation = styled.object`
     position: fixed;
 `
 
-const LoadingScreen = () => (
+const LoadingCaption = styled.div`
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 1.5vh;
+    position: absolute;
+    color: white;
+    font-weight: 700;
+`
+
+const LoadingScreen = ({ loadingCaption }) => (
     <div>
         <Animation type="image/svg+xml" data={LoadingAnimation}>svg-animation</Animation>
+        <LoadingCaption>{loadingCaption}</LoadingCaption>
     </div>
 )
 

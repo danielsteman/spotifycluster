@@ -9,18 +9,21 @@ import { useState } from 'react';
 const Root = () => {
 
     const [loading, setLoading] = useState(true)
+    const [loadingCaption, setLoadingCaption] = useState('')
 
-    const showLoading = () => (
+    const showLoading = (loadingCaption) => {
         setLoading(true)
-    )
+        setLoadingCaption(loadingCaption)
+    }
 
-    const hideLoading = () => (
+    const hideLoading = () => {
         setLoading(false)
-    )
+        setLoadingCaption('')
+    }
 
     return(
         <Router>
-            <App loading={loading} showLoading={() => showLoading()} hideLoading={() => hideLoading()}/>
+            <App loading={loading} loadingCaption={loadingCaption} showLoading={showLoading} hideLoading={hideLoading}/>
         </Router>
     )
 }

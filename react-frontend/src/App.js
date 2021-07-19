@@ -7,7 +7,7 @@ import ErrorScreen from './components/ErrorScreen'
 import React, { useState, useEffect } from "react";
 import './App.css'
 
-const App = ({ loading, showLoading, hideLoading }) => {
+const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
 
   const [authenticated, setAuthenticated] = useState(false)
 
@@ -59,7 +59,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
   }
 
   const getLabels = (model) => {
-    showLoading()
+    showLoading('Calculating labels...')
     fetch('/spotify/get-labels', {
       method: 'POST',
       headers: {
@@ -77,7 +77,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
 
   const fetchPlaylist = (playlistId) => {
 
-    showLoading()
+    showLoading('Fetching tracks...')
 
     setTitles([])
     setArtists([])
@@ -171,7 +171,7 @@ const App = ({ loading, showLoading, hideLoading }) => {
     ? playlistList.find(playlist => playlist.id === Number(match.params.id))
     : null
 
-  if (loading) { return <LoadingScreen/> }
+  if (loading) { return <LoadingScreen loadingCaption={loadingCaption}/> }
   return (
     <div>
       <Switch>

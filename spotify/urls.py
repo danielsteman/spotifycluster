@@ -14,9 +14,7 @@ urlpatterns = [
     path('get-track-ids', getTrackIds.as_view()),
     path('get-labels', getLabels.as_view()),
     path('get-dimension-reduction', getDimensionReduction.as_view()),
-    path('celery-task', celeryTask.as_view()),
     path('task-result', taskStatus.as_view()),
-    path('dimension-reduction-async', DimensionReductionAsync.as_view()),
-    re_path(r'^favicon\.ico$', favicon_view)
+    path('dimension-reduction-async', DimensionReductionAsync.as_view())
 ]
 

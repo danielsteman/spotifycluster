@@ -1,6 +1,5 @@
 import json
 from django.shortcuts import redirect
-from rest_framework import response
 from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 from rest_framework.views import APIView
 from requests import Request, post
@@ -9,7 +8,7 @@ from rest_framework.response import Response
 from .util import *
 from .machine_learning import PCA_reduce
 from spotifycluster.celery import app
-from .tasks import AffinityPropagation_task, TSNE_reduce_async
+from .tasks import TSNE_reduce_async
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -121,18 +120,3 @@ class taskStatus(APIView):
             response = 'something went wrong'
 
         return Response(response, status=status.HTTP_200_OK)
-
-#### celery demo        
-
-class celeryTask(APIView):
-    def post(self, request, format=None):
-
-        body_decoded = request.body.decode('utf-8')
-        body = json.loads(body_decoded)
-        features = body['features']
-        
-        task = AffinityPropagation_task.delay(features)
-        response = task.task_id
-                
-        return Response(response, status=status.HTTP_200_OK)
-

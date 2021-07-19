@@ -4,6 +4,7 @@ from datetime import timedelta
 from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
 from .machine_learning import TSNE_reduce, KMeans_labeler, MeanShift_labeler, AffinityPropagation_labeler
+from .tasks import KMeans_async, MeanShift_async, AffinityPropagation_async
 
 BASE_URL = 'https://api.spotify.com/v1'
 batch_size = 100
@@ -132,3 +133,16 @@ def get_labels(model, features):
         return print('Model is not included in cluster model module')
 
     return labels
+
+def start_labels_calculation_task(model, features):
+    if model == 'K-means':
+        task = KMeans_async.delay(features)
+    elif model == 'Affinity Propagation':
+        task = MeanShift_async.delay(features)
+    elif model == 'Mean Shift':
+        task = AffinityPropagation_async.delay(features)
+    else:
+        return print('Model is not included in cluster model module')
+
+    response = task.task_id
+    return response

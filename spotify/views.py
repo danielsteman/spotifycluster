@@ -93,7 +93,17 @@ class getLabels(APIView):
         
         return Response(response, status=status.HTTP_200_OK)
 
-class DimensionReductionAsync(APIView):
+class labelsAsync(APIView):
+    def post(self, request):
+        model = request.headers.get('Model')
+        body = request.body.decode('utf-8')
+        features = json.loads(body)
+        task_id = start_labels_calculation_task(model, features)
+        response = task_id
+        
+        return Response(response, status=status.HTTP_200_OK)
+
+class dimensionReductionAsync(APIView):
     def post(self, request):
 
         body_decoded = request.body.decode('utf-8')

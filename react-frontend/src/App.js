@@ -70,8 +70,26 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
     })
     .then(response => response.json())
     .then(data => {
-      setLabels(data)
+
       hideLoading()
+
+      const interval = setInterval(() => {
+        fetch('/spotify/task-result', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'taskId': data
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          if (data.state === 'SUCCESS') {
+            setLabels(data.result)
+            clearInterval(interval)
+          }
+        })
+      }, 3000)
     })
   }
 

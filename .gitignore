@@ -1,7 +1,6 @@
 node_modules
 react-frontend/node_modules
 .env
-staticfiles
 db.sqlite3
 *.pyc
 *.cpython-39.pyc

@@ -44,13 +44,14 @@ valence
 tempo
  ```
 
-### Launch commands
+## Launch commands :rocket:
+```
 brew services start rabbitmq  
 celery -A spotifycluster worker --loglevel=INFO  
 python manage.py runserver  
 cd react-frontend && npm run build  
-
-### Environment variables
+ ```
+## Environment variables :earth_africa:
 ```
 CLIENT_ID
 CLIENT_SECRET

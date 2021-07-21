@@ -29,7 +29,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = 'e@cy5%n+e2z5oo5$==0d(0s&l(kh+9ra)2alr#7-&_-g2%lnit'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
-    'spotify.apps.SpotifyConfig'
+    'spotify.apps.SpotifyConfig',
+    'channels',
+    'django_eventstream'
 ]
 
 MIDDLEWARE = [
+    'django_grip.GripMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -162,3 +165,6 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
 CELERY_RESULT_EXPIRE_TIME = 30 * 60
 CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+
+# ASGI application
+ASGI_APPLICATION = 'spotifycluster.asgi.application'

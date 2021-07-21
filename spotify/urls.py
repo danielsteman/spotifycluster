@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path
 from .views import *
 
 from django.views.generic.base import RedirectView
@@ -15,6 +15,7 @@ urlpatterns = [
     path('get-labels', labelsAsync.as_view()),
     path('get-dimension-reduction', getDimensionReduction.as_view()),
     path('task-result', taskStatus.as_view()),
-    path('dimension-reduction-async', dimensionReductionAsync.as_view())
+    path('dimension-reduction-async', dimensionReductionAsync.as_view()),
+    path('event-stream', eventStream.as_view())
 ]
 

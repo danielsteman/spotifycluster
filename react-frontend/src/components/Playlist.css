@@ -1,0 +1,24 @@
+.btn {
+    width: 150px;
+    margin: 2px;
+}
+
+.btn-primary{
+    background-color:#282828;
+    border-color: #282828
+}
+
+btn-primary.focus{
+    background-color: #606060;
+    border-color: #606060;
+}
+
+.dropdown-menu{
+    background-color: #606060;
+    color: white;
+}
+
+dropdown-menu.show{
+    background-color: black;
+    color: white;
+}

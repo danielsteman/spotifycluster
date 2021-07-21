@@ -9,6 +9,7 @@ from .util import *
 from .machine_learning import PCA_reduce
 from spotifycluster.celery import app
 from .tasks import TSNE_reduce_async
+from django_eventstream import send_event
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -130,3 +131,7 @@ class taskStatus(APIView):
             response = 'something went wrong'
 
         return Response(response, status=status.HTTP_200_OK)
+
+class eventStream(APIView):
+    def get(self):
+        return send_event('test', 'message', {'text': 'hello world'})

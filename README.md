@@ -44,8 +44,24 @@ valence
 tempo
  ```
 
-### Launch commands
-brew services start rabbitmq
-celery -A spotifycluster worker --loglevel=INFO
-python manage.py runserver
-cd react-frontend && npm run build
+## Launch commands :rocket:
+
+These commands are automatically executed when opening the project in VS code. Settings for this automated operation live in .vscode/settings.json.
+```
+celery -A spotifycluster worker --loglevel=INFO  
+python manage.py runserver  
+cd react-frontend && npm start
+ ```
+Before opening (and running) the project, start a local RabbitMQ instance:
+```
+brew services start rabbitmq 
+ ```
+
+## Environment variables :earth_africa:
+```
+CLIENT_ID={your spotify client id}
+CLIENT_SECRET={your spotify client secret}
+DATABASE_URL={URL to sqlite database}
+REDIS_URL={URL to Heroku Redis instance}
+ ```
+

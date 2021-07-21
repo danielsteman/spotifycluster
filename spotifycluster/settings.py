@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
-    'spotify.apps.SpotifyConfig'
+    'spotify.apps.SpotifyConfig',
+    'channels',
+    'django_eventstream'
 ]
 
 MIDDLEWARE = [
+    'django_grip.GripMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -162,3 +165,6 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
 CELERY_RESULT_EXPIRE_TIME = 30 * 60
 CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+
+# ASGI application
+ASGI_APPLICATION = 'spotifycluster.asgi.application'

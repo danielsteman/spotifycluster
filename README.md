@@ -49,3 +49,12 @@ brew services start rabbitmq
 celery -A spotifycluster worker --loglevel=INFO
 python manage.py runserver
 cd react-frontend && npm run build
+
+### Environment variables
+```
+CLIENT_ID
+CLIENT_SECRET
+DATABASE_URL
+REDIS_URL
+ ```
+

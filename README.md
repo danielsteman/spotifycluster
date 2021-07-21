@@ -45,10 +45,10 @@ tempo
  ```
 
 ### Launch commands
-brew services start rabbitmq
-celery -A spotifycluster worker --loglevel=INFO
-python manage.py runserver
-cd react-frontend && npm run build
+brew services start rabbitmq  
+celery -A spotifycluster worker --loglevel=INFO  
+python manage.py runserver  
+cd react-frontend && npm run build  
 
 ### Environment variables
 ```

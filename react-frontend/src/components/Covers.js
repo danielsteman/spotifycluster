@@ -94,7 +94,7 @@ const Covers = ({
         return `${artist} - ${titles[index]}`
     })
 
-    const data = {'dataPointLabels': dataPointLabels, 'TSNE_features': TSNEfeatures, 'features': features}
+    const data = {'dataPointLabels': dataPointLabels, 'TSNE_features': TSNEfeatures, 'features': features, 'userId': userInfo.id}
 
     const history = useHistory()
 

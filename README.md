@@ -58,6 +58,8 @@ brew services start rabbitmq
  ```
 
 ## Environment variables :earth_africa:
+
+Mind that Heroku rotates credentials periodically and updates applications where this datastore is attached.
 ```
 CLIENT_ID={your spotify client id}
 CLIENT_SECRET={your spotify client secret}

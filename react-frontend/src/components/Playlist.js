@@ -2,10 +2,12 @@ import { useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 import ScatterPlot from './Plot';
 import LoadingScreen from './LoadingScreen'
+import ToggleableWarning from './ToggleableWarning'
 import styled from "styled-components";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown'
+import Button from 'react-bootstrap/Button';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import './Playlist.css';
 
@@ -14,6 +16,19 @@ const ButtonContainer = styled.div`
     z-index: 1;
     margin-top: 2%;
     margin-left: 5%;
+`
+
+const GeneratePlaylistsButtonContainer = styled.div`
+    position: fixed;
+    z-index: 2;
+    height: 15vh;
+    width: 15vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+    color: white;
 `
 
 const Playlist = ({ getLabels, labels }) => {
@@ -54,6 +69,8 @@ const Playlist = ({ getLabels, labels }) => {
     const [YButtonTitle, setYButtonTitle] = useState('TSNE2')
     const [ZButtonTitle, setZButtonTitle] = useState('TSNE3')
 
+    const [warningVisible, setWarningVisible] = useState(false)
+
     const location = useLocation();
 
     useEffect(() => {
@@ -62,6 +79,10 @@ const Playlist = ({ getLabels, labels }) => {
         setSelectedDimY(location.data.TSNE_features.map(x => x[1]))
         setSelectedDimZ(location.data.TSNE_features.map(x => x[2]))
     }, [location.data, data])
+
+    const toggleWarning = () => {
+        setWarningVisible(!warningVisible);
+    }
 
     const selectDims = (axis, value, dim) => {
         if (axis === 'X axis') {
@@ -112,11 +133,25 @@ const Playlist = ({ getLabels, labels }) => {
                         <DropdownItem 
                             eventKey={model}
                             key={index}
-                            onClick={() => getLabels(model)}
+                            onClick={() => {                                
+                                getLabels(model)
+                            }}
                         >{model}</DropdownItem>
                     ))}
                 </DropdownButton>
+                {labels.length !== 0 && 
+                    <Button
+                        onClick={() => {
+                            setWarningVisible(true)
+                        }}
+                    >Generate playlists</Button>
+                }
             </ButtonContainer>
+            {warningVisible && 
+                <GeneratePlaylistsButtonContainer>
+                    <ToggleableWarning toggleWarning={toggleWarning} warningVisible={warningVisible}/>
+                </GeneratePlaylistsButtonContainer>
+            }
             <ScatterPlot
                 data={data}
                 labels={labels} 

@@ -95,7 +95,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
 
   const fetchPlaylist = (playlistId) => {
 
-    showLoading('Fetching tracks...')
+    showLoading('Fetching data points...')
 
     setTitles([])
     setArtists([])

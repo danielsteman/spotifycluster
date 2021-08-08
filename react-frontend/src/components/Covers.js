@@ -77,13 +77,13 @@ const Covers = ({
     images, 
     selectPlaylist, 
     userInfo, 
-    titles, 
+    titles,
     artists, 
     features,
     TSNEfeatures,
     playlistList, 
     selectedPlaylist, 
-    setSelectPlaylistId,
+    setSelectPlaylistId
     }) => {
 
     function onlyUnique(value, index, self) {
@@ -94,9 +94,12 @@ const Covers = ({
         return `${artist} - ${titles[index]}`
     })
 
-    const data = {'dataPointLabels': dataPointLabels, 'TSNE_features': TSNEfeatures, 'features': features, 'userId': userInfo.id}
-
-    console.log(userInfo.id)
+    const data = {
+        'dataPointLabels': dataPointLabels, 
+        'TSNE_features': TSNEfeatures, 
+        'features': features, 
+        'userId': userInfo.id,
+    }
 
     const history = useHistory()
 

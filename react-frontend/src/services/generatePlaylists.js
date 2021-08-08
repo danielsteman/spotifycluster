@@ -10,7 +10,7 @@ const generatePlaylists = (userId, name, n) => {
 
     console.log(headers)
 
-    const response = axios({
+    return axios({
         method: 'post',
         url: '/spotify/generate-playlists', 
         headers: headers
@@ -19,8 +19,7 @@ const generatePlaylists = (userId, name, n) => {
         console.log(res.data)
         return res.data
     })
-
-    return response
+    .catch(e => console.log(e))
 }
 
 export default generatePlaylists

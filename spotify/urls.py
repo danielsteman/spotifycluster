@@ -16,6 +16,7 @@ urlpatterns = [
     path('get-dimension-reduction', getDimensionReduction.as_view()),
     path('task-result', taskStatus.as_view()),
     path('dimension-reduction-async', dimensionReductionAsync.as_view()),
+    path('generate-playlists', generatePlaylists.as_view()),
     path('event-stream', eventStream.as_view())
 ]
 

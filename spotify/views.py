@@ -1,4 +1,5 @@
 import json
+from spotifycluster import settings
 from django.shortcuts import redirect
 from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 from rest_framework.views import APIView
@@ -13,7 +14,7 @@ from django_eventstream import send_event
 
 class AuthURL(APIView):
     def get(self, request, format=None):
-        scope = 'user-read-playback-state user-modify-playback-state user-read-currently-playing'
+        scope = 'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-modify-public playlist-modify-private'
 
         url = Request('GET', 'https://accounts.spotify.com/authorize', params={
             'client_id': CLIENT_ID,
@@ -85,15 +86,6 @@ class getDimensionReduction(APIView):
 
         return Response(response, status=status.HTTP_200_OK)
 
-class getLabels(APIView):
-    def post(self, request, format=None):
-        model = request.headers.get('Model')
-        body = request.body.decode('utf-8')
-        features = json.loads(body)
-        response = get_labels(model, features)
-        
-        return Response(response, status=status.HTTP_200_OK)
-
 class labelsAsync(APIView):
     def post(self, request):
         model = request.headers.get('Model')
@@ -135,3 +127,44 @@ class taskStatus(APIView):
 class eventStream(APIView):
     def get(self):
         return send_event('test', 'message', {'text': 'hello world'})
+    
+class generatePlaylists(APIView):
+    def post(self, request):
+
+        """
+        1. create N new playlists
+        {
+            "name": "New Playlist",
+            "description": "New playlist description",
+            "public": false
+        }
+        """
+
+        session_id = request.session.session_key
+        user_id = request.headers.get('user-id')
+        n = request.headers.get('n')
+        name = request.headers.get('new-playlist-name')
+        response = generate_playlists(session_id, user_id, n, name)
+
+        return Response(response, status=status.HTTP_200_OK)
+
+"""
+    2. fill playlists with tracks based on label data
+    {
+        "playlist_id": ,
+        "position": 0,
+        "uris": 
+    }
+"""
+
+class fillPlaylists(APIView):
+    def post(self, request):
+
+        session_id = request.session.session_key
+        playlist_ids = request.headers.get('playlist-ids')
+        labels = request.headers.get('labels'),
+        uris = request.headers.get('uris')
+
+        response = fill_playlists(session_id, playlist_ids, uris, labels)
+
+        return Response(response, status=status.HTTP_200_OK)

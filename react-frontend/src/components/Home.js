@@ -10,16 +10,18 @@ const Home = ({
     features,
     TSNEfeatures,
     ids, 
+    uris,
     artists, 
     selectedPlaylist, 
     setSelectPlaylistId,
-    getLabels
+    getLabels,
+    labels
 }) => {
-    const images = playlistList.map(x => x.images[0].url)
+    const images = playlistList.map(x => x.images[0] ? x.images[0].url : '')
     if (authenticated) {
         return(
             <Covers
-                images={images} 
+                images={images}
                 selectPlaylist={selectPlaylist} 
                 userInfo={userInfo}
                 titles={titles}

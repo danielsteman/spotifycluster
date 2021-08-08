@@ -16,6 +16,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
   const [titles, setTitles] = useState([])
   const [artists, setArtists] = useState([])
   const [ids, setIds] = useState([])
+  const [uris, setUris] = useState([])
   const [selectedPlaylist, setSelectedPlaylist] = useState('')
 
   const [features, setFeatures] = useState([])
@@ -39,8 +40,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
       fetch('/spotify/playlists')
       .then(response => response.json())
       .then(data => {
-        const ids = data.playlists.items.map(x => x.id)
-        setIds(ids)
         setPlaylistList(data.playlists.items)
       })
       fetch('/spotify/user-profile')
@@ -102,6 +101,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
     setFeatures([])
     setTSNEfeatures([])
     setIds([])
+    setUris([])
     setLabels([])
 
     const features = []
@@ -119,6 +119,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
         setArtists(artists => ([...artists, ...data.artist]))
         setFeatures(features => ([...features, ...data.features]))
         setIds(ids => ([...ids, ...data.track_ids]))
+        setUris(uris => ([...uris, ...data.track_uris]))
         features.push(data.features)
 
         if (data.next_url) {
@@ -137,8 +138,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
           })
           .then(response => response.json())
           .then(data => {
-            console.log(data)
-
+            console.log(`task id: ${data}`)
             const interval = setInterval(() => {
               fetch('/spotify/task-result', {
                 method: 'POST',
@@ -198,6 +198,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
             id={playlist}
             getLabels={getLabels}
             labels={labels}
+            uris={uris}
           />
         </Route>
         <Route path='/login'>

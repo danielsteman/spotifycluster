@@ -61,9 +61,10 @@ brew services start rabbitmq
 
 Mind that Heroku rotates credentials periodically and updates applications where this datastore is attached.
 ```
-CLIENT_ID={your spotify client id}
-CLIENT_SECRET={your spotify client secret}
-DATABASE_URL={URL to sqlite database}
-REDIS_URL={URL to Heroku Redis instance}
+CLIENT_ID={your spotify client id}  
+CLIENT_SECRET={your spotify client secret}  
+DATABASE_URL={URL to sqlite database}  
+REDIS_URL={URL to Heroku Redis instance}  
+REDIS_URL_LOCAL=redis://  
  ```
 

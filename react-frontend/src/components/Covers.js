@@ -96,6 +96,8 @@ const Covers = ({
 
     const data = {'dataPointLabels': dataPointLabels, 'TSNE_features': TSNEfeatures, 'features': features, 'userId': userInfo.id}
 
+    console.log(userInfo.id)
+
     const history = useHistory()
 
     return(

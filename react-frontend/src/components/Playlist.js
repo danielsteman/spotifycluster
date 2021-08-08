@@ -70,6 +70,7 @@ const Playlist = ({ getLabels, labels }) => {
     const [ZButtonTitle, setZButtonTitle] = useState('TSNE3')
 
     const [warningVisible, setWarningVisible] = useState(false)
+    const [userId, setUserId] = useState('')
 
     const location = useLocation();
 
@@ -78,6 +79,7 @@ const Playlist = ({ getLabels, labels }) => {
         setSelectedDimX(location.data.TSNE_features.map(x => x[0]))
         setSelectedDimY(location.data.TSNE_features.map(x => x[1]))
         setSelectedDimZ(location.data.TSNE_features.map(x => x[2]))
+        setUserId(data.userId)
     }, [location.data, data])
 
     const toggleWarning = () => {
@@ -149,7 +151,11 @@ const Playlist = ({ getLabels, labels }) => {
             </ButtonContainer>
             {warningVisible && 
                 <GeneratePlaylistsButtonContainer>
-                    <ToggleableWarning toggleWarning={toggleWarning} warningVisible={warningVisible}/>
+                    <ToggleableWarning
+                        toggleWarning={toggleWarning} 
+                        warningVisible={warningVisible} 
+                        userId={userId}
+                    />
                 </GeneratePlaylistsButtonContainer>
             }
             <ScatterPlot

@@ -33,8 +33,6 @@ const GeneratePlaylistsButtonContainer = styled.div`
 
 const Playlist = ({ getLabels, labels, uris }) => {
 
-    console.log(uris)
-
     const models = {
         'K-means': {'params': {'n_clusters': 0}},
         'Affinity Propagation': {'params': {'max_iter': 5000, 'convergence_iter': 150}},

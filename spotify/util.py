@@ -1,3 +1,4 @@
+from rest_framework import response
 from .models import SpotifyToken
 from django.utils import timezone
 from datetime import timedelta
@@ -5,6 +6,7 @@ from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
 from .machine_learning import TSNE_reduce, KMeans_labeler, MeanShift_labeler, AffinityPropagation_labeler
 from .tasks import KMeans_async, MeanShift_async, AffinityPropagation_async
+import json
 
 BASE_URL = 'https://api.spotify.com/v1'
 batch_size = 100
@@ -156,10 +158,33 @@ def generate_playlists(session_id, user_id, n, name):
 
     return playlist_ids
 
+def fill_playlist(session_id, playlist_id, uris):
+
+    endpoint = f'/playlists/{playlist_id}/tracks'
+    data = json.dumps({'uris': list(uris.split(','))})
+    response = execute_spotify_api_request(session_id, endpoint, data=data, post_=True)
+
+    return response
+
 def fill_playlists(session_id, playlist_ids, uris, labels):
 
-    endpoint = f'/playlists/{playlist_ids[0]}/tracks'
+    uris = list(uris.split(','))
+    labels = list(labels)
 
-    return endpoint
+    print (f'playlist_ids: {playlist_ids}')
+    print (f"uris: {uris}")
+    print (f'labels: {labels}')
+
+    responses_object = []
+
+    for i in range(len(playlist_ids)):
+        indices = [j for j, x in enumerate(labels) if x == i]
+        playlist_id = playlist_ids[i],
+        data = json.dumps({'uris': [uris[x] for x in indices]})
+        endpoint = f'/playlists/{playlist_id}/tracks'
+        response = execute_spotify_api_request(session_id, endpoint, data=data, post_=True)
+        responses_object.append(response)
+
+    return responses_object
 
     

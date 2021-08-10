@@ -41,6 +41,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
       .then(response => response.json())
       .then(data => {
         setPlaylistList(data.playlists.items)
+        console.log(data.playlists.items)
       })
       fetch('/spotify/user-profile')
       .then(response => response.json())

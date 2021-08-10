@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useHistory } from 'react-router-dom';
+import uniqueValues from "../utils/uniqueValues";
 
 const Grid = styled.div`
     display: grid;
@@ -86,10 +87,6 @@ const Covers = ({
     setSelectPlaylistId
     }) => {
 
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
-
     const dataPointLabels = artists.map((artist, index) => {
         return `${artist} - ${titles[index]}`
     })
@@ -124,7 +121,7 @@ const Covers = ({
                 {titles.length > 0
                     && <div>
                         <PlaylistsInfoText>No. of songs: {titles.length}</PlaylistsInfoText>
-                        <PlaylistsInfoText>No. of artists: {artists.filter(onlyUnique).length}</PlaylistsInfoText>
+                        <PlaylistsInfoText>No. of artists: {uniqueValues(artists).length}</PlaylistsInfoText>
                         {TSNEfeatures.length > 0
                             && <PlotButton onClick={() => {
                                 history.push({pathname: `playlists/${selectedPlaylist}`, data})

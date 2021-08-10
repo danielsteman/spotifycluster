@@ -140,11 +140,13 @@ class generatePlaylists(APIView):
         }
         """
 
-        session_id = request.session.session_key
-        user_id = request.headers.get('user-id')
-        n = request.headers.get('n')
-        name = request.headers.get('new-playlist-name')
-        response = generate_playlists(session_id, user_id, n, name)
+        # session_id = request.session.session_key
+        # user_id = request.headers.get('user-id')
+        # n = request.headers.get('n')
+        # name = request.headers.get('new-playlist-name')
+        # response = generate_playlists(session_id, user_id, n, name)
+
+        response = ["1MmtlDnsahcF1h4J6DUbFG", "2B45K2l7gzmyhTIlBaGEMd", "2XUOaIrgPywmTCrnPuEQ9U", "16TLp1kbCWII9oQjtpqAhd", "7aMPkDY3LOGhZspqNDBlAG"]
 
         return Response(response, status=status.HTTP_200_OK)
 
@@ -166,5 +168,16 @@ class fillPlaylists(APIView):
         uris = request.headers.get('uris')
 
         response = fill_playlists(session_id, playlist_ids, uris, labels)
+
+        return Response(response, status=status.HTTP_200_OK)
+
+class fillPlaylist(APIView):
+    def post(self, request):
+
+        session_id = request.session.session_key
+        playlist_ids = request.headers.get('playlist-ids')
+        uris = request.headers.get('uris')
+
+        response = fill_playlists(session_id, playlist_ids, uris)
 
         return Response(response, status=status.HTTP_200_OK)

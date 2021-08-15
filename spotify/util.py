@@ -145,7 +145,7 @@ def generate_playlists(session_id, user_id, n, name):
     endpoint = f'/users/{user_id}/playlists'
 
     playlist_ids = []
-        
+    
     for cluster in range(int(n)):
         data = {
             'name': f'{name}-{cluster+1}',
@@ -161,30 +161,12 @@ def generate_playlists(session_id, user_id, n, name):
 def fill_playlist(session_id, playlist_id, uris):
 
     endpoint = f'/playlists/{playlist_id}/tracks'
-    data = json.dumps({'uris': list(uris.split(','))})
+    uris_as_list = list(uris.split(','))
+    data = {
+        'uris': uris_as_list
+    }
     response = execute_spotify_api_request(session_id, endpoint, data=data, post_=True)
 
     return response
-
-def fill_playlists(session_id, playlist_ids, uris, labels):
-
-    uris = list(uris.split(','))
-    labels = list(labels)
-
-    print (f'playlist_ids: {playlist_ids}')
-    print (f"uris: {uris}")
-    print (f'labels: {labels}')
-
-    responses_object = []
-
-    for i in range(len(playlist_ids)):
-        indices = [j for j, x in enumerate(labels) if x == i]
-        playlist_id = playlist_ids[i],
-        data = json.dumps({'uris': [uris[x] for x in indices]})
-        endpoint = f'/playlists/{playlist_id}/tracks'
-        response = execute_spotify_api_request(session_id, endpoint, data=data, post_=True)
-        responses_object.append(response)
-
-    return responses_object
 
     

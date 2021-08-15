@@ -1,56 +1,71 @@
 import axios from 'axios';
 import uniqueValues from '../utils/uniqueValues'
+import pagination from '../utils/pagination'
 
-const generatePlaylists = (userId, name, n) => {
+const generatePlaylists = async (userId, name, n) => {
 
     const headers = {
         'user-id': userId,
         'new-playlist-name': name,
         'n': n
     }
-
-    console.log(`generate playlist request headers: ${headers}`)
-
-    const promise = axios({
-        method: 'post',
-        url: '/spotify/generate-playlists', 
-        headers: headers
-    })
-
-    const dataPromise = promise.then(res => res.data).catch(e => console.log(e))
-
-    return dataPromise
-    // return ["1MmtlDnsahcF1h4J6DUbFG", "2B45K2l7gzmyhTIlBaGEMd", "2XUOaIrgPywmTCrnPuEQ9U", "16TLp1kbCWII9oQjtpqAhd", "7aMPkDY3LOGhZspqNDBlAG"]
+    try {
+        const res = await axios({
+            method: 'post',
+            url: '/spotify/generate-playlists', 
+            headers: headers
+        })
+        const data = await res.data
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+    
 }
 
-const fillPlaylists = (playlistIds, labels, uris) => {
+const fillPlaylist = async (playlistId, uris) => {
 
-    const headers = {
-        'playlist-ids': playlistIds,
-        'labels': labels,
-        'uris': uris
+    let _uris = []
+
+    if (uris.length > 100) {
+        _uris = pagination(uris)
+    } else {
+        _uris = [uris]
     }
 
-    console.log(`fill playlist parameters: ${headers}`)
+    _uris.forEach(async batch => {
+        let headers = {
+            'playlist-id': playlistId,
+            'uris': batch
+        }
+        try {
+            const res = await axios({
+                method: 'post',
+                url: '/spotify/fill-playlist',
+                headers: headers
+            })
+            const data = await res.data
+            return data
+        } catch (e) {
+            console.log(e)
+        }
+    })
 
-    return axios({
-        method: 'post',
-        url: '/spotify/fill-playlists',
-        headers: headers
-    })
-    .then(res => {
-        console.log(res.data)
-        return res.data
-    })
-    .catch(e => console.log(e))
 }
 
-const generateAndFill = (playlistIds, labels, uris, userId, name, n) => {
-    
+const generateAndFill = async (labels, uris, userId, name) => {
+
     const setOfLabels = uniqueValues(labels)
+    const n = setOfLabels.length
+    const playlistIds = await generatePlaylists(userId, name, n)
     
-    setOfLabels.forEach(element => {
-        console.log(uris.filter((val, i) => labels[i] === element))
+    // For each label, check if the label matches a label from the set of labels and assign to a playlist.
+    // It doesn't matter to which playlist the cluster is assigned because no unique characteristics are identified for each cluster.
+
+    setOfLabels.forEach( async (element, index) => {
+        const playlistId = playlistIds[index]
+        const songs = uris.filter((_, i) => labels[i] === element)
+        await fillPlaylist(playlistId, songs)
     });
 
 }

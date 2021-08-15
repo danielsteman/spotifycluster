@@ -31,7 +31,7 @@ const GeneratePlaylistsButtonContainer = styled.div`
     color: white;
 `
 
-const Playlist = ({ getLabels, labels, uris }) => {
+const Playlist = ({ getLabels, labels, uris, showLoading, hideLoading }) => {
 
     const models = {
         'K-means': {'params': {'n_clusters': 0}},
@@ -157,6 +157,8 @@ const Playlist = ({ getLabels, labels, uris }) => {
                         userId={userId}
                         uris={uris}
                         labels={labels}
+                        showLoading={showLoading}
+                        hideLoading={hideLoading}
                     />
                 </GeneratePlaylistsButtonContainer>
             }

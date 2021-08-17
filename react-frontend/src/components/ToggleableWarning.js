@@ -6,6 +6,8 @@ import generateAndFill from '../services/generateAndFill'
 
 const ToggleableWarning = ({ toggleWarning, warningVisible, userId, uris, labels, showLoading, hideLoading }) => {
 
+    
+
     return (
         <Toast show={warningVisible} onClose={toggleWarning}>
             <Toast.Header>
@@ -16,7 +18,7 @@ const ToggleableWarning = ({ toggleWarning, warningVisible, userId, uris, labels
                 <Button onClick={async () => await generateAndFill(labels, uris, userId, 'cluster')}
                 >Continue</Button>
             </Toast.Body>
-      </Toast>
+        </Toast>
     )
 }
 

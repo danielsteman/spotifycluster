@@ -5,6 +5,9 @@ import Playlist from './components/Playlist'
 import LoadingScreen from './components/LoadingScreen'
 import ErrorScreen from './components/ErrorScreen'
 import React, { useState, useEffect } from "react";
+import isAuthenticated from './services/isAuthenticated'
+import getPlaylists from './services/getPlaylists'
+import getUserProfile from './services/getUserProfile';
 import './App.css'
 
 const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
@@ -25,13 +28,12 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
   const [labels, setLabels] = useState([])
 
   useEffect(() => {
-    fetch('/spotify/is-authenticated')
-      .then(response => response.json())
-      .then(data => {
-        console.log(`authentication status: ${data.status}`)
-        setAuthenticated(data.status)
-        hideLoading()
-      })
+    const getAuthenticationStatus = async () => {
+      const response = await isAuthenticated()
+      setAuthenticated(response)
+    }
+    getAuthenticationStatus()
+    hideLoading()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -50,6 +52,15 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
         hideLoading()
       })
     }
+
+    // const getPlaylistsAndUserProfile = async (authenticationStatus) => {
+    //   const playlists = await getPlaylists(authenticationStatus)
+    //   setPlaylistList(playlists)
+    //   const userProfile = await getUserProfile(authenticationStatus)
+    //   setUserInfo(userProfile)
+    // }
+    // getPlaylistsAndUserProfile(authenticated)
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated])
 
@@ -200,6 +211,8 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
             getLabels={getLabels}
             labels={labels}
             uris={uris}
+            showLoading={showLoading}
+            hideLoading={hideLoading}
           />
         </Route>
         <Route path='/login'>

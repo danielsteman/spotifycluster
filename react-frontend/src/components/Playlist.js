@@ -143,9 +143,7 @@ const Playlist = ({ getLabels, labels, uris, showLoading, hideLoading }) => {
                 </DropdownButton>
                 {labels.length !== 0 && 
                     <Button
-                        onClick={() => {
-                            setWarningVisible(true)
-                        }}
+                        onClick={() => setWarningVisible(true)}
                     >Generate playlists</Button>
                 }
             </ButtonContainer>

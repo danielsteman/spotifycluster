@@ -130,43 +130,22 @@ class eventStream(APIView):
     
 class generatePlaylists(APIView):
     def post(self, request):
-
-        """
-        1. create N new playlists
-        {
-            "name": "New Playlist",
-            "description": "New playlist description",
-            "public": false
-        }
-        """
-
-        # session_id = request.session.session_key
-        # user_id = request.headers.get('user-id')
-        # n = request.headers.get('n')
-        # name = request.headers.get('new-playlist-name')
-        # response = generate_playlists(session_id, user_id, n, name)
+        session_id = request.session.session_key
+        user_id = request.headers.get('user-id')
+        n = request.headers.get('n')
+        name = request.headers.get('new-playlist-name')
+        response = generate_playlists(session_id, user_id, n, name)
 
         # MOCK RESPONSE
-        response = ["7xMDhzkPdvGfJ2yIvOsv4y", "21xheSCZk6yW98nydjr87i", "08uYHrfbs4ApzW1Y3WDnPJ", "1s1MUUOVJXctFpgj7CReMK", "4gFDu1ENwflujFHgi4gRUX"]
+        # response = ["7xMDhzkPdvGfJ2yIvOsv4y", "21xheSCZk6yW98nydjr87i", "08uYHrfbs4ApzW1Y3WDnPJ", "1s1MUUOVJXctFpgj7CReMK", "4gFDu1ENwflujFHgi4gRUX"]
 
         return Response(response, status=status.HTTP_200_OK)
 
-"""
-    2. fill playlists with tracks based on label data
-    {
-        "playlist_id": ,
-        "position": 0,
-        "uris": 
-    }
-"""
-
 class fillPlaylist(APIView):
     def post(self, request):
-
         session_id = request.session.session_key
         playlist_id = request.headers.get('playlist-id')
         uris = request.headers.get('uris')
-
         response = fill_playlist(session_id, playlist_id, uris)
 
         return Response(response, status=status.HTTP_200_OK)

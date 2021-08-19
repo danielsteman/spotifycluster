@@ -29,7 +29,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = 'e@cy5%n+e2z5oo5$==0d(0s&l(kh+9ra)2alr#7-&_-g2%lnit'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -162,9 +162,9 @@ CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
-CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
+CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL_LOCAL') if DEBUG else os.environ.get('REDIS_URL')
 CELERY_RESULT_EXPIRE_TIME = 30 * 60
-CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+CELERY_BROKER_URL = os.environ.get('REDIS_URL_LOCAL') if DEBUG else os.environ.get('REDIS_URL')
 
 # ASGI application
 ASGI_APPLICATION = 'spotifycluster.asgi.application'

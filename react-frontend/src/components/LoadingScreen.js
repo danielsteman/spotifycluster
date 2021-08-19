@@ -8,6 +8,7 @@ const Animation = styled.object`
     left: 50%;
     transform: translate(-50%, -50%); 
     position: fixed;
+    text-align: center;
 `
 
 const LoadingCaption = styled.div`

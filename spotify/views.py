@@ -1,4 +1,5 @@
 import json
+from spotifycluster import settings
 from django.shortcuts import redirect
 from .credentials import REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 from rest_framework.views import APIView
@@ -13,7 +14,7 @@ from django_eventstream import send_event
 
 class AuthURL(APIView):
     def get(self, request, format=None):
-        scope = 'user-read-playback-state user-modify-playback-state user-read-currently-playing'
+        scope = 'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-modify-public playlist-modify-private'
 
         url = Request('GET', 'https://accounts.spotify.com/authorize', params={
             'client_id': CLIENT_ID,
@@ -85,15 +86,6 @@ class getDimensionReduction(APIView):
 
         return Response(response, status=status.HTTP_200_OK)
 
-class getLabels(APIView):
-    def post(self, request, format=None):
-        model = request.headers.get('Model')
-        body = request.body.decode('utf-8')
-        features = json.loads(body)
-        response = get_labels(model, features)
-        
-        return Response(response, status=status.HTTP_200_OK)
-
 class labelsAsync(APIView):
     def post(self, request):
         model = request.headers.get('Model')
@@ -135,3 +127,25 @@ class taskStatus(APIView):
 class eventStream(APIView):
     def get(self):
         return send_event('test', 'message', {'text': 'hello world'})
+    
+class generatePlaylists(APIView):
+    def post(self, request):
+        session_id = request.session.session_key
+        user_id = request.headers.get('user-id')
+        n = request.headers.get('n')
+        name = request.headers.get('new-playlist-name')
+        response = generate_playlists(session_id, user_id, n, name)
+
+        # MOCK RESPONSE
+        # response = ["7xMDhzkPdvGfJ2yIvOsv4y", "21xheSCZk6yW98nydjr87i", "08uYHrfbs4ApzW1Y3WDnPJ", "1s1MUUOVJXctFpgj7CReMK", "4gFDu1ENwflujFHgi4gRUX"]
+
+        return Response(response, status=status.HTTP_200_OK)
+
+class fillPlaylist(APIView):
+    def post(self, request):
+        session_id = request.session.session_key
+        playlist_id = request.headers.get('playlist-id')
+        uris = request.headers.get('uris')
+        response = fill_playlist(session_id, playlist_id, uris)
+
+        return Response(response, status=status.HTTP_200_OK)

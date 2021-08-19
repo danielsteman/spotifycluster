@@ -68,7 +68,7 @@ const LoginButton = styled.button`
     }
 `
 
-const Login = ( {handleLogin} ) => {
+const Login = ( {login} ) => {
 
     const [activeIndex, setActiveIndex] = useState(0)
 
@@ -95,7 +95,9 @@ const Login = ( {handleLogin} ) => {
             <LoginTypewriterContainer>
                 <LoginTypewriter>{models[activeIndex]}</LoginTypewriter>
             </LoginTypewriterContainer>
-            <LoginButton onClick={handleLogin}>Login</LoginButton>
+            <LoginButton onClick={() => {
+                login()
+            }}>Login</LoginButton>
         </LoginContainer>
     )
 }

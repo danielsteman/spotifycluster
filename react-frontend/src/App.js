@@ -5,7 +5,12 @@ import Playlist from './components/Playlist'
 import LoadingScreen from './components/LoadingScreen'
 import ErrorScreen from './components/ErrorScreen'
 import React, { useState, useEffect } from "react";
+// import isAuthenticated from './services/isAuthenticated'
+// import getPlaylists from './services/getPlaylists'
+// import getUserProfile from './services/getUserProfile';
+// import handleLogin from './services/handleLogin'
 import './App.css'
+import ResultPage from './components/ResultPage';
 
 const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
 
@@ -16,6 +21,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
   const [titles, setTitles] = useState([])
   const [artists, setArtists] = useState([])
   const [ids, setIds] = useState([])
+  const [uris, setUris] = useState([])
   const [selectedPlaylist, setSelectedPlaylist] = useState('')
 
   const [features, setFeatures] = useState([])
@@ -24,6 +30,14 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
   const [labels, setLabels] = useState([])
 
   useEffect(() => {
+    // const getAuthenticationStatus = async () => {
+    //   const response = await isAuthenticated()
+    //   console.log(response)
+    //   setAuthenticated(response)
+    // }
+    // getAuthenticationStatus()
+    // hideLoading()
+
     fetch('/spotify/is-authenticated')
       .then(response => response.json())
       .then(data => {
@@ -31,6 +45,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
         setAuthenticated(data.status)
         hideLoading()
       })
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -39,9 +54,8 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
       fetch('/spotify/playlists')
       .then(response => response.json())
       .then(data => {
-        const ids = data.playlists.items.map(x => x.id)
-        setIds(ids)
         setPlaylistList(data.playlists.items)
+        console.log(data.playlists.items)
       })
       fetch('/spotify/user-profile')
       .then(response => response.json())
@@ -50,6 +64,15 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
         hideLoading()
       })
     }
+
+    // const getPlaylistsAndUserProfile = async (authenticationStatus) => {
+    //   const playlists = await getPlaylists(authenticationStatus)
+    //   setPlaylistList(playlists)
+    //   const userProfile = await getUserProfile(authenticationStatus)
+    //   setUserInfo(userProfile)
+    // }
+    // getPlaylistsAndUserProfile(authenticated)
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated])
 
@@ -95,13 +118,14 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
 
   const fetchPlaylist = (playlistId) => {
 
-    showLoading('Fetching tracks...')
+    showLoading('Fetching data points...')
 
     setTitles([])
     setArtists([])
     setFeatures([])
     setTSNEfeatures([])
     setIds([])
+    setUris([])
     setLabels([])
 
     const features = []
@@ -119,6 +143,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
         setArtists(artists => ([...artists, ...data.artist]))
         setFeatures(features => ([...features, ...data.features]))
         setIds(ids => ([...ids, ...data.track_ids]))
+        setUris(uris => ([...uris, ...data.track_uris]))
         features.push(data.features)
 
         if (data.next_url) {
@@ -137,8 +162,7 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
           })
           .then(response => response.json())
           .then(data => {
-            console.log(data)
-
+            console.log(`task id: ${data}`)
             const interval = setInterval(() => {
               fetch('/spotify/task-result', {
                 method: 'POST',
@@ -167,11 +191,12 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
       });
   }
 
-  const handleLogin = () => {  
+  const login = () => {  
     return(
     fetch('/spotify/is-authenticated')
       .then(response => response.json())
       .then(data => {
+        console.log(data.status)
         if (!data.status) {
           fetch('/spotify/get-auth-url')
             .then(response => response.json())
@@ -182,6 +207,20 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
         }
       })
     )
+
+    // try {
+    //   const loginUrl = await handleLogin()
+    //   if (loginUrl !== true) {
+    //     setAuthenticated(true)
+    //     window.location.replace(loginUrl)
+    //   } else {
+    //     return loginUrl
+    //   }
+    //   console.log(`login url: ${loginUrl}`)
+    // } catch (e) {
+    //   console.log(e)
+    // }
+    
   }
 
   const match = useRouteMatch('/playlists/:id')
@@ -198,10 +237,16 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
             id={playlist}
             getLabels={getLabels}
             labels={labels}
+            uris={uris}
+            showLoading={showLoading}
+            hideLoading={hideLoading}
           />
         </Route>
         <Route path='/login'>
-          <Login handleLogin={handleLogin} />
+          <Login login={login} />
+        </Route>
+        <Route path='/result'>
+          <ResultPage/>
         </Route>
         <Route path='/'>
           <Home

@@ -1,5 +1,4 @@
 from celery import shared_task
-from spotifycluster.celery import app
 from .machine_learning import *
 
 """

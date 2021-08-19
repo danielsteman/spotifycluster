@@ -20,5 +20,6 @@ from core.views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('spotify/', include('spotify.urls')),
+    path('celery-progress/', include('celery_progress.urls')),
     path('', index, name='index')
 ]

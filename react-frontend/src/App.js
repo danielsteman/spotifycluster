@@ -41,7 +41,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
     fetch('/spotify/is-authenticated')
       .then(response => response.json())
       .then(data => {
-        console.log(`authentication status: ${data.status}`)
         setAuthenticated(data.status)
         hideLoading()
       })
@@ -55,7 +54,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
       .then(response => response.json())
       .then(data => {
         setPlaylistList(data.playlists.items)
-        console.log(data.playlists.items)
       })
       fetch('/spotify/user-profile')
       .then(response => response.json())
@@ -106,7 +104,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data)
           if (data.state === 'SUCCESS') {
             setLabels(data.result)
             clearInterval(interval)
@@ -137,8 +134,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
       .then(response => response.json())
       .then(data => {
 
-        console.log(data)
-
         setTitles(titles => ([...titles, ...data.title]))
         setArtists(artists => ([...artists, ...data.artist]))
         setFeatures(features => ([...features, ...data.features]))
@@ -162,7 +157,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
           })
           .then(response => response.json())
           .then(data => {
-            console.log(`task id: ${data}`)
             const interval = setInterval(() => {
               fetch('/spotify/task-result', {
                 method: 'POST',
@@ -173,7 +167,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
               })
               .then(response => response.json())
               .then(data => {
-                console.log(data)
                 if (data.state === 'SUCCESS') {
                   setTSNEfeatures(data.result)
                   clearInterval(interval)
@@ -196,7 +189,6 @@ const App = ({ loading, loadingCaption, showLoading, hideLoading }) => {
     fetch('/spotify/is-authenticated')
       .then(response => response.json())
       .then(data => {
-        console.log(data.status)
         if (!data.status) {
           fetch('/spotify/get-auth-url')
             .then(response => response.json())

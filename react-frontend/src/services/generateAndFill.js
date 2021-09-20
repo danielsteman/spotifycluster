@@ -25,10 +25,11 @@ const generatePlaylists = async (userId, name, n) => {
 
 const fillPlaylist = async (playlistId, uris) => {
 
+    const batchSize = 100
     let _uris = []
 
-    if (uris.length > 100) {
-        _uris = pagination(uris)
+    if (uris.length > batchSize) {
+        _uris = pagination(uris, batchSize)
     } else {
         _uris = [uris]
     }

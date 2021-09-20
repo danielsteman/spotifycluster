@@ -10,7 +10,6 @@ const handleLogin = async () => {
                 url: '/spotify/get-auth-url'
             })
             const loginUrl = await res.data.url
-            console.log(loginUrl)
             return loginUrl
         } else {
             return true

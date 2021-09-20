@@ -10,7 +10,6 @@ const getUserProfile = async (authenticationStatus) => {
             })
             const data = await res.data
             const userProfile = data.user_profile
-            console.log(userProfile)
             return userProfile
         } catch (e) {
             console.log(e)

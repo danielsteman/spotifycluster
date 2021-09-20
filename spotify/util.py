@@ -6,7 +6,6 @@ from .credentials import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
 from .machine_learning import TSNE_reduce, KMeans_labeler, MeanShift_labeler, AffinityPropagation_labeler
 from .tasks import KMeans_async, MeanShift_async, AffinityPropagation_async
-import json
 
 BASE_URL = 'https://api.spotify.com/v1'
 batch_size = 100

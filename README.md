@@ -2,6 +2,8 @@
 
 ## General info
 
+Hosted on the free-tier of Heroku: playlistsbyclustering.com
+
 Leveraging algorithms of scikit-learn to find clusters within your playlists. 
 
 Documentation: https://scikit-learn.org/stable/modules/clustering.html

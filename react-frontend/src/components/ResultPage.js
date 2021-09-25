@@ -30,7 +30,7 @@ const ResultPage = () => {
         <div>
             <Header>Done!</Header>
             <ButtonContainer>
-                <Button onClick={() => history.push('/')}>Take me back</Button>
+                <Button size="lg" onClick={() => history.push('/')}>Take me back</Button>
             </ButtonContainer>
         </div>
     )

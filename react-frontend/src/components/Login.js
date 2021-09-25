@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
+import Button from 'react-bootstrap/Button';
 
 const LoginTitle = styled.div`
     color : white;
@@ -47,27 +48,6 @@ const LoginContainer = styled.div`
     margin: 3em;
 `
 
-const LoginButton = styled.button`
-    padding: 1em;
-    margin-top: 1em;
-    margin-left: 50%;
-    transform: translate(-50%);
-
-    font-family: 'Mulish', sans-serif;
-    font-weight: 700;
-    font-size: 3vw;    
-    color: white;
-    
-    border: 7px solid;
-    border-color: white;
-    background-color: black;
-    width: max-content;
-
-    @media screen and (max-width: 500px) {
-        margin-top: 12em;
-    }
-`
-
 const Login = ( {login} ) => {
 
     const [activeIndex, setActiveIndex] = useState(0)
@@ -95,9 +75,9 @@ const Login = ( {login} ) => {
             <LoginTypewriterContainer>
                 <LoginTypewriter>{models[activeIndex]}</LoginTypewriter>
             </LoginTypewriterContainer>
-            <LoginButton onClick={() => {
+            <Button size="lg" style={{marginTop: "2em"}}onClick={() => {
                 login()
-            }}>Login</LoginButton>
+            }}>Login</Button>
         </LoginContainer>
     )
 }

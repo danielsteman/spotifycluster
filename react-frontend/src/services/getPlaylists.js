@@ -10,7 +10,6 @@ const getPlaylists = async (authenticationStatus) => {
             })
             const data = await res.data
             const playlists = data.playlists.items
-            console.log(playlists)
             return playlists
         } catch (e) {
             console.log(e)

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useHistory } from 'react-router-dom';
 import uniqueValues from "../utils/uniqueValues";
+import Button from 'react-bootstrap/Button';
 
 const Grid = styled.div`
     display: grid;
@@ -59,21 +60,6 @@ const PlaylistsInfoText = styled.div`
     color: white;
 `
 
-const PlotButton = styled.button`
-    padding: 1em;
-    margin-top: 5em;
-
-    font-family: 'Mulish', sans-serif;
-    font-weight: 700;
-    font-size: 2vw;
-    color: white;
-    
-    border: 7px solid;
-    border-color: white;
-    background-color: black;
-    width: max-content;
-`
-
 const Covers = ({ 
     images, 
     selectPlaylist, 
@@ -123,9 +109,9 @@ const Covers = ({
                         <PlaylistsInfoText>No. of songs: {titles.length}</PlaylistsInfoText>
                         <PlaylistsInfoText>No. of artists: {uniqueValues(artists).length}</PlaylistsInfoText>
                         {TSNEfeatures.length > 0
-                            && <PlotButton onClick={() => {
+                            && <Button size="lg" style={{marginTop: "4vh"}} onClick={() => {
                                 history.push({pathname: `playlists/${selectedPlaylist}`, data})
-                            }}>Plot</PlotButton>
+                            }}>Plot</Button>
                         }
                     </div>
                 }

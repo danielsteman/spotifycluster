@@ -5,7 +5,7 @@ CLIENT_SECRET = "b0fd34a734ed4fc48056d114d0205803"
 
 if DEBUG:
     REDIRECT_URI = "http://127.0.0.1:8000/spotify/redirect"
-    URL = "http://127.0.0.1:8000"
+    URL = "http://127.0.0.1:3000"
 else:
-    REDIRECT_URI = "http://nameless-taiga-02413.herokuapp.com/spotify/redirect"
-    URL = "http://nameless-taiga-02413.herokuapp.com"
+    REDIRECT_URI = "http://playlistsbyclustering.com/spotify/redirect"
+    URL = "http://playlistsbyclustering.com"

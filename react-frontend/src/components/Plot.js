@@ -4,6 +4,7 @@ import useWindowDimensions from '../hooks/useWinDims'
 const ScatterPlot = ( {data, labels, Xdim, Ydim, Zdim} ) => {
 
     // use custom hook to retrieve fullscreen measurements
+    // https://community.plotly.com/t/how-to-animate-a-rotation-of-a-3d-plot/20974/5
     const { height, width } = useWindowDimensions()
 
     const axesStyle = {
@@ -36,7 +37,6 @@ const ScatterPlot = ( {data, labels, Xdim, Ydim, Zdim} ) => {
                 }
             ]}
             layout={ {
-                displayModeBar: false,
                 margin: {pad: 20},
                 width: width, 
                 height: height,
@@ -45,7 +45,8 @@ const ScatterPlot = ( {data, labels, Xdim, Ydim, Zdim} ) => {
                     aspectmode: 'auto',
                     yaxis: axesStyle,
                     xaxis: axesStyle,
-                    zaxis: axesStyle
+                    zaxis: axesStyle,
+                    camera: {eye: {x: 1.25, y: 2.5, z: 0.8}}
                 }
             } }
         />
